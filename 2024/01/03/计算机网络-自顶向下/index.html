@@ -1,0 +1,834 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>计算机网络-自顶向下 | Weeb-killer的博客</title><meta name="author" content="Weeb-killer"><meta name="copyright" content="Weeb-killer"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Chapter1分组交换 Packet-switching端系统之间交换报文（message）,但是发送源会把报文切割成比较小的数据块，这个数据块就是分组，每个分组由路由器和链路交换机传送（也就是分组交换机） 存储转发传输 store-and-forward transmission指的是交换机开始发送分组之前，必须接收到整个分组。就是把要发的东西全部传输到交换机后，交换机会在接受的时候存储起来部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络-自顶向下">
+<meta property="og:url" content="https://weeb-killer.github.io/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/index.html">
+<meta property="og:site_name" content="Weeb-killer的博客">
+<meta property="og:description" content="Chapter1分组交换 Packet-switching端系统之间交换报文（message）,但是发送源会把报文切割成比较小的数据块，这个数据块就是分组，每个分组由路由器和链路交换机传送（也就是分组交换机） 存储转发传输 store-and-forward transmission指的是交换机开始发送分组之前，必须接收到整个分组。就是把要发的东西全部传输到交换机后，交换机会在接受的时候存储起来部">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://weeb-killer.github.io/img/avatar.png">
+<meta property="article:published_time" content="2024-01-03T09:07:48.000Z">
+<meta property="article:modified_time" content="2024-01-11T08:01:29.469Z">
+<meta property="article:author" content="Weeb-killer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://weeb-killer.github.io/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://weeb-killer.github.io/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '计算机网络-自顶向下',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-01-11 16:01:29'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/backg.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Weeb-killer的博客"><span class="site-name">Weeb-killer的博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">计算机网络-自顶向下</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-01-03T09:07:48.000Z" title="发表于 2024-01-03 17:07:48">2024-01-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-01-11T08:01:29.469Z" title="更新于 2024-01-11 16:01:29">2024-01-11</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="计算机网络-自顶向下"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Chapter1"><a href="#Chapter1" class="headerlink" title="Chapter1"></a>Chapter1</h1><h2 id="分组交换-Packet-switching"><a href="#分组交换-Packet-switching" class="headerlink" title="分组交换 Packet-switching"></a>分组交换 Packet-switching</h2><p>端系统之间交换报文（message）,但是发送源会把报文切割成比较小的数据块，这个数据块就是<strong>分组</strong>，每个分组由路由器和链路交换机传送（也就是分组交换机）</p>
+<h3 id="存储转发传输-store-and-forward-transmission"><a href="#存储转发传输-store-and-forward-transmission" class="headerlink" title="存储转发传输 store-and-forward transmission"></a><u>存储转发传输 store-and-forward transmission</u></h3><p>指的是交换机开始发送分组之前，必须接收到整个分组。就是把要发的东西全部传输到交换机后，交换机会在接受的时候存储起来部分数据，直到整个数据都到了，存储成一个整的包，他才会发送</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231227185157544.png" alt="image-20231227185157544"></p>
+<p>在图1・11所示的特定时刻，源已经传输了分组1的一部分，分组1的前沿已经到达了路由器。因为该路由器应用了存储转发机 制，所以此时它还不能传输已经接收的比特，而是必须先缓存（即“存储”）该分组的比 特。仅当路由器已经接收完了该分组的所有比特后，它才能开始向出链路传输（即“转 发”）该分组</p>
+<p>L表示这个包的长度，R是单位时间被发送的数据大小，所以包1从发送到被目的地完整接收的时间是<strong>2L&#x2F;R</strong>，如果直接传的话（不管这个存发方法），时延就是L&#x2F;R，</p>
+<p>计算一下从开始发，到3个包都接收到了的时延是<strong>4L&#x2F;R</strong></p>
+<p>一般情况，通过N条速率为R的链路，也就是N-1台路由器，一个包端到端的时延就是<strong>N*L&#x2F;R</strong></p>
+<p>分组交换机有<strong>输出缓存</strong>和<strong>输出队列</strong>，除了存储转发时延以外，这些包都要在这里排队，这个<strong>排队时延</strong>，如果缓存空间满了那么新的包就会<strong>丢包</strong></p>
+<h2 id="备选核心：电路交换"><a href="#备选核心：电路交换" class="headerlink" title="备选核心：电路交换"></a><u>备选核心：电路交换</u></h2><p>电路交换会在端系统之间预留资源，而分组交换是不预留的。啥意思捏，一个简单的类比是，考虑两家餐馆，一家需要顾客预订，而另一家不需要预订，但不保证能安排客。对于需要预订的那家餐馆，我们在离开家之前必须承受先打电话预订的麻烦，但当我们到达该餐馆时，原则上我们能够立即入座并点菜。对于不需要预订的那家餐馆，我们不必麻烦地预订餐桌，但当我们到达该餐馆时，也许不得不先等待一张餐桌空闲后才能入座。那么前者就是电路后者就是分组</p>
+<p>发送方和接受方需要建立一条连接，在这条路上的所有交换机都要维护这个连接，一个链接就是一条<strong>电路（circuit）</strong>，连接期间会为双方预留带宽，确保他们发送和接受都是以恒定的速率，两台主机之间建立<strong>端到端连接（end-to-end）</strong></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231227191519973.png" alt="image-20231227191519973"></p>
+<p>这些线路之间的资源都是不共享的（no sharing）</p>
+<p>复用就是：FDM和TDM 频分复用和时分复用</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231227191636646.png" alt="image-20231227191636646"></p>
+<p>二者对比：</p>
+<p>分组交换：不适合</p>
+<ol>
+<li>不适合实时服务，因为端到端的时延可变而不可预测的</li>
+</ol>
+<p>好处：</p>
+<ol>
+<li>它提供了比电路交换更好的带宽共享</li>
+<li>比电路交换更加简单、有效、实现成本更低</li>
+</ol>
+<p>目前来讲，分组交换性能优于电路交换的性能。电路交换<strong>不需要考虑需求</strong>，而预先分配了传输链路的使用，可能会出现资源浪费，另一方面分组交换<strong>按需</strong>分配链路使用，链路传输能力是共享的</p>
+<h2 id="各种时延"><a href="#各种时延" class="headerlink" title="各种时延"></a><u>各种时延</u></h2><p>在分组交换中，其中有很多时延，最重要的是<strong>节点处理时延（nodal processing delay）</strong>、<strong>排队时延（queuing delay）</strong>、<strong>传输时延（transmission delay）</strong>、<strong>传播时延（propagation delay）</strong>。这些时延累计加起来就是<strong>节点总时延（total nodal delay）</strong></p>
+<p><em>d</em><u>nodal &#x3D; <em>d</em>proc + <em>d</em>queue + <em>d</em>trans + <em>d</em>prop</u></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231227193434231.png" alt="image-20231227193434231"></p>
+<h3 id="节点处理时延"><a href="#节点处理时延" class="headerlink" title="节点处理时延"></a>节点处理时延</h3><p>指的是<u>检查分组（检查比特差错）和决定将该分组带向何处所需要的时间</u></p>
+<p>比特差错一般出现在上游节点向路由器A传输这些分组比特的过程中，时间一般是微妙或者更低的数量级，处理完以后路由器会指导分组向B发送的队列中</p>
+<h3 id="排队时延"><a href="#排队时延" class="headerlink" title="排队时延"></a>排队时延</h3><p>在队列中，分组在链路上等待传输时的时延。时间长度取决于比它先到的包的数量</p>
+<p>时间长度可以是毫秒到微妙级别的</p>
+<h3 id="传输时延"><a href="#传输时延" class="headerlink" title="传输时延"></a><u>传输时延</u></h3><p>也就是包从A全部离开的时间 L&#x2F;R</p>
+<p>时间一般是毫秒到微秒级的</p>
+<h3 id="传播时延"><a href="#传播时延" class="headerlink" title="传播时延"></a><u>传播时延</u></h3><p>这个包的比特完全离开A的时间到这个包完全被B所接收（最后一个比特也被B所收到）</p>
+<p>如果AB之间距离是d，s是传播速度（光速），那么时间就是d&#x2F;s</p>
+<p>在广域网中传播时延为毫秒级</p>
+<h3 id="对比传输与传播"><a href="#对比传输与传播" class="headerlink" title="对比传输与传播"></a>对比传输与传播</h3><p>传输是路由器推出分组所需要的时间，与路由器间的距离无关，而传播时延是一个比特从一台路由器传播到另一台的时间</p>
+<h3 id="流量强度"><a href="#流量强度" class="headerlink" title="流量强度"></a>流量强度</h3><p>就是收和发的速度</p>
+<p>L为每个包的大小，a为单位时间内来的包的数量，R是队列出队的速度（从第一个比特离开开始，到最后一个比特离开）</p>
+<p>La&#x2F;R</p>
+<h2 id="因特网协议栈（看每一层的功能）"><a href="#因特网协议栈（看每一层的功能）" class="headerlink" title="因特网协议栈（看每一层的功能）"></a><em>因特网协议栈</em>（看每一层的功能）</h2><p>展示的有五层，各层所有协议就叫协议栈</p>
+<p>应用层，传输层，网络层，链路层，物理层</p>
+<h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a><u>应用层</u></h3><p><strong>是网络应用程序以及他们应用层协议存留的地方（支持网络应用 supporting network application）<u>该层为用于通信的应用程序和用于消息传输的底层网络提供接口</u>。</strong>协议有HTTP（提供web文档的请求和传送）、SMTP（提供电子邮件报文的传输）、FTP（提供两个端系统之间的文件传送…），socket套接字就是这一层的</p>
+<p>协议分布在多个端系统上，一个端系统的应用程序使用协议到另外一个端系统的应用程序交换信息分组。位于应用层的信息分组叫做<strong>报文（message）</strong></p>
+<h3 id="运输层"><a href="#运输层" class="headerlink" title="运输层"></a><u>运输层</u></h3><p><strong>它用于在应用程序端点之间传送应用层报文。</strong> 有且只有两种协议TCP和UDP</p>
+<p>在运输层的分组（包）叫做<strong>报文段（segment）</strong></p>
+<h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a><u>网络层</u></h3><p>负责将<strong>数据报（datagram）</strong>的网络层分组（包）从一台主机移动到另外一台主机</p>
+<p>IP和路由选择协议就是这一层的</p>
+<h3 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a><u>链路层</u></h3><p><strong>通过源和目的地之间的一系列路由器路由数据报</strong>将分组从一个节点（主机或路由器）移动到路径下一个节点</p>
+<p>在链路层中，分组（包）称为<strong>帧（frame）</strong></p>
+<h3 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a><u>物理层</u></h3><p>链路层是将整个帧从一个网络元素移动到邻近的网络元素，而<strong>物理层是将帧中的一个个比特从一个节点移动到下一个节点</strong></p>
+<h3 id="OSI的7层结构"><a href="#OSI的7层结构" class="headerlink" title="OSI的7层结构"></a>OSI的7层结构</h3><p>你别管他，他里面在应用层和运输层之间多了个表示层和会话层，但这些后来都被希望让程序员在应用层上开发</p>
+<h3 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h3><p>注意路由器和交换机（链路层交换机）是不同的</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231227201112542.png" alt="image-20231227201112542"></p>
+<h1 id="Chapter2"><a href="#Chapter2" class="headerlink" title="Chapter2"></a>Chapter2</h1><h2 id="网络应用程序体系结构"><a href="#网络应用程序体系结构" class="headerlink" title="网络应用程序体系结构"></a><u>网络应用程序体系结构</u></h2><p>现在主流的分成两派：客户-服务器体系结构与对等体系结构</p>
+<h3 id="客户-服务器体系结构（client-server-architecture）"><a href="#客户-服务器体系结构（client-server-architecture）" class="headerlink" title="客户-服务器体系结构（client-server architecture）"></a><u>客户-服务器体系结构（client-server architecture）</u></h3><p>大概分为一个总是开着的主机，也就是服务器，他服务于许多其他称为客户的主机请求，比如说web应用</p>
+<p>用户与服务器沟通，可能会间断地连接，可以有动态IP</p>
+<p>特征：客户之间不直接通信，服务器都有固定和周知的地址（IP地址）</p>
+<p>如果有很多客户访问服务器，可能服务器就很难应付了，所以拿很多主机作为一个数据中心（data center）可以扩展的，这一坨就是一个虚拟的整个主机，这个叫做虚拟服务器</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231227202114852.png" alt="image-20231227202114852"></p>
+<h3 id="P2P"><a href="#P2P" class="headerlink" title="P2P"></a><u>P2P</u></h3><p>对于数据中心的专用服务器有最小的依赖或者没有，应用程序在简短地连接的主机之间使用直接通信，这些注意被称为<strong>对等方</strong>，他们不由服务提供商所有</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102212716372.png" alt="image-20240102212716372"></p>
+<p>对等方的机子不是永远开着的，随机端系统间的直接通信，管理复杂</p>
+<p>最大的特性是<strong>自扩展性（self-scalability）</strong></p>
+<h3 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h3><p>实际上通信的是进程（process）而不是程序，在不同端系统上的进程会通过计算机网络进行交换<strong>报文（message）</strong>来通信，回报文进行响应</p>
+<p>再每对进程通信的时候，我们会把其中一方当作客户（client），一方当作服务器（server），发起通信的进程就是客户，在开始会话的时候等待联系的进程就是服务器</p>
+<p>那么进程是怎么与计算机网络相连的捏</p>
+<p>他们通过socket套接字的软件接口向网络发送报文和接受报文，而程序员就是在应用层使用套接字去操作运输层，所以他们只能选定</p>
+<ol>
+<li>对应的传输协议</li>
+<li>和设定少数的一些运输层参数，发到哪</li>
+</ol>
+<p>那么发到哪，怎么发到那里呢</p>
+<h2 id="进程寻址"><a href="#进程寻址" class="headerlink" title="进程寻址"></a><u>进程寻址</u></h2><p>目的地需要有个地址，所以要定义两种信息：<u>主机地址</u>和<u>在目的主机中指定接收的进程的标识符</u></p>
+<p>分别对应了IP地址和端口号（port number）</p>
+<p>IP是一个32比特的值，并且可以唯一地标识该主机</p>
+<p>端口号就是应用的标识符，会给对应的程序分配的。eg：web服务器用80，邮件服务器进程（SMTP协议）用25</p>
+<h3 id="运输层协议需要包括的内容"><a href="#运输层协议需要包括的内容" class="headerlink" title="运输层协议需要包括的内容"></a>运输层协议需要包括的内容</h3><p>可靠数据传输rdt（reliable data transfer），确保数据符合接收方的可靠要求</p>
+<p>有一些app他需要信息100%正确到达，有一些是可以容忍的（loss-tolerant）</p>
+<p>吞吐量</p>
+<p>对于一些app他要求你的传输速度要满足，对这个有要求的是带宽敏感应用（bandwidth-sensitive application），而可以按照吞吐量调整的应用被称为弹性应用（elastic application）</p>
+<p>定时：就是时延的要求</p>
+<p>安全性：…</p>
+<p>一些app的要求</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231227205134805.png" alt="image-20231227205134805"></p>
+<h2 id="因特网传输协议服务"><a href="#因特网传输协议服务" class="headerlink" title="因特网传输协议服务"></a><u>因特网传输协议服务</u></h2><h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a><u>TCP</u></h3><p>它包括<strong>面向连接服务</strong>和<strong>可靠数据传输的服务</strong></p>
+<h4 id="面向连接服务-connection-oriented"><a href="#面向连接服务-connection-oriented" class="headerlink" title="面向连接服务 connection-oriented"></a><u>面向连接服务 connection-oriented</u></h4><p>在应用层数据报文开始流动之前，tcp会让客户端和服务器互相交换运输层控制信息。在这个握手之后，一个tcp连接就在两个进程的套接字之间建立了，他是全双工，就是两边都可以传和接收报文，结束时会拆除连接</p>
+<h4 id="可靠的数据传输服务-reliable-transport"><a href="#可靠的数据传输服务-reliable-transport" class="headerlink" title="可靠的数据传输服务 reliable transport"></a><u>可靠的数据传输服务 reliable transport</u></h4><p>通信进程能够依靠tcp，<strong>无差错地、无乱序地</strong>交付所有数据，没有字节丢失和冗余（不多不少）</p>
+<h4 id="拥塞控制-congestion-control"><a href="#拥塞控制-congestion-control" class="headerlink" title="拥塞控制 congestion control"></a><u>拥塞控制 congestion control</u></h4><p><strong>当接收方和发送方之间的网络出现拥塞，那么tcp就会试图抑制发送进程</strong>，他也会限制每一个tcp连接，让他们达到公平共享网络带宽</p>
+<h4 id="流控制-flow-control"><a href="#流控制-flow-control" class="headerlink" title="流控制 flow control"></a><u>流控制 flow control</u></h4><p>发送方发送的速度不会超过接收方的速度</p>
+<h4 id="不提供"><a href="#不提供" class="headerlink" title="不提供"></a><u>不提供</u></h4><p>定时，没有最短时间的要求，没有最小吞吐量保证，没有安全措施（现在改进了，有但不完全有）</p>
+<h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a><u>UDP</u></h3><p>是一种<u><strong>不提供不必要</strong>服务的<strong>轻量级</strong>运输协议，仅提供<strong>最小的服务</strong></u> 尽力而为，有啥我发啥，我不管他怎么样，我就只负责发</p>
+<p>他是无连接的，就是两者之间没有握手的过程，提供不可靠数据传送服务，但是相比tcp，他比较快，正是没有那么多p事所带来的好处。</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231227210845729.png" alt="image-20231227210845729"></p>
+<p>tcp和udp都不提供加密的服务，加密版的SSL他不属于运输层的协议，他是在应用层上实现的</p>
+<h2 id="Web和HTTP"><a href="#Web和HTTP" class="headerlink" title="Web和HTTP"></a><u>Web和HTTP</u></h2><p>web按需操作，只要你想要，就有这个内容，和web沾边的都比较简单，且低成本</p>
+<h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a><u>HTTP</u></h3><p>web应用层协议是超文本传输协议（HTTP）是web的核心。它由两个程序实现，一个客户端，一个服务器程序（前后端），他们都运行在不同的端系统上（机子）。<strong>http定义了这些报文的结构以及客户和服务器进行报文交换的方式</strong></p>
+<p><strong>web页面（Web page）</strong>是由对象（object）组成的，可以是html文件，图片等。大多数web页面包含一个html基本文件以及应用对象，就是html中引用的对象。由于web浏览器（web browser）实现了http的客户端的部分，所以二者直接等同。web服务器实现了http服务器端。</p>
+<p>http定义了web客户端向服务器端请求的方式</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231227212250006.png" alt="image-20231227212250006"></p>
+<p><u>http在运输层上使用<strong>TCP</strong>作为支持运输协议</u></p>
+<p>web他是我们讲的客户-服务器体系结构</p>
+<p>服务器向客户发送被请求的文件时，不会存储任何关于这个用户的状态信息，所以说服务器不管用户请求几次，啥时候请求的都会返回对应信息。换句话说HTTP服务器并不会保存关于客户的任何信息，所以他是<strong>无状态的协议（stateless）</strong></p>
+<h3 id="HTTP连接"><a href="#HTTP连接" class="headerlink" title="HTTP连接"></a><u>HTTP连接</u></h3><p>客户和服务器在一个相当长的时间范围进行通信，这些请求可以是规则地按照周期性发出或者时间断地一个接一个发</p>
+<p>所以就会想每个请求&#x2F;响应是通过一个<strong>单独</strong>的tcp连接发送还是所有请求和响应以<strong>相同</strong>的tcp连接发送呢</p>
+<p>按照上面HTTP连接分为两种</p>
+<h4 id="非持续连接（non-persistent-connection）"><a href="#非持续连接（non-persistent-connection）" class="headerlink" title="非持续连接（non-persistent connection）"></a><u>非持续连接（non-persistent connection）</u></h4><p>前者就是</p>
+<p>例子直接用课本上的</p>
+<p>我们看看在非持续连接情况下，从服务器向客户传送一个Web页面的步骤。假设该页 面含有一个HTML基本文件和10个JPEG图形，并且这11个对象位于同一台服务器上。进 一步假设该 HTML 文件的 URL 为：http :〃<a target="_blank" rel="noopener" href="http://www.someschool.edu/someDepartment/home.index%E6%88%91%E4%BB%AC%E7%9C%8B%E7%9C%8B%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%EF%BC%9A">www.someSchool.edu/someDepartment/home.index我们看看发生了什么情况：</a> 1） HTTP客户进程在端口号80发起一个到服务器www. someSchool. edu的TCP连接， 该端口号是HTTP的默认端口。在客户和服务器上分别有一个套接字与该连接相关联。 </p>
+<p>2） HTTP客户经它的套接字向该服务器发送一个HTTP请求报文。请求报文中包含了 路径名&#x2F;someDepartment&#x2F;home. index （后面我们会详细讨论HTTP报文）。 </p>
+<p>3） HTTP服务器进程经它的套接字接收该请求报文，从其存储器（RAM或磁盘）中 检索出对象 www. someSchool. edu&#x2F;someDepartment&#x2F;home. index,在一个 HTTP 响应报文中封 装对象，并通过其套接字向客户发送响应报文。 </p>
+<p>4） HTTP服务器进程通知TCP断开该TCP连接。（但是直到TCP确认客户已经完整 地收到响应报文为止，它才会实际中断连接。） </p>
+<p>5） HTTP客户接收响应报文，TCP连接关闭。该报文指岀封装的对象是一个HTML文 件，客户从响应报文中提取出该文件，检査该HTML文件，得到对10个JPEG图形的引用。 </p>
+<p>6） 对每个引用的JPEG图形对象重复前4个步骤。</p>
+<p>当然不同的浏览器可能会用不同的方法解释对应的web页面（不同方式展现），因为http协议只定义了http客户端程序与服务器程序之间的通信协议</p>
+<p><em>换句话来讲上述内容</em>：也就是每次tcp请求会在服务器发送一个对象后关闭，连接不会为了其他对象而持续的</p>
+<p>所以说每个tcp连接在服务器发送一个对象后就关闭了，也就是连接不会为了其他对象而保存下来，这么看时间挺长的，但是这后续的10次连接可以并行处理</p>
+<p><strong>一个包的往返时间RTT（round-trip time）</strong>，指的是一个短分组从客户到服务器然后返回客户端的时间，包括<u>传播时延，分组处理时延，排队时延</u>（就是没有传输时延，下面那张图也是这样展示的）</p>
+<p>一次非持续的http反馈时间就是 <strong>2*RTT+文件传输时延</strong></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228164410606.png" alt="image-20231228164410606"></p>
+<h4 id="持续连接（persistent-HTTP）"><a href="#持续连接（persistent-HTTP）" class="headerlink" title="持续连接（persistent HTTP）"></a><u>持续连接（persistent HTTP）</u></h4><p>非持续的缺点就是：</p>
+<ol>
+<li>对于<strong>每一次</strong>请求的<strong>对象</strong>都要建立和维护一个<strong>全新的</strong>连接。然而对于每个这样的连接，在客户端和服务器端中都必须要分配TCP缓存区且保持TCP变量，而这给web服务器带来了严重的负担</li>
+<li>另一个缺点就是每一个对象都要受到两次的RTT的时延，一个用来请求连接或者说创建tcp连接，另一个RTT用于请求和接收一个对象</li>
+</ol>
+<p>对于采用http持续链接的情况下，服务器在发送响应后保持该tcp连接打开，后续的请求和响应就可以直接使用这个连接进行传送。如果经过一段时间后这个连接未被使用，那么就关闭连接</p>
+<p>所有请求对象只有一个RTT时延</p>
+<h2 id="HTTP请求报文格式"><a href="#HTTP请求报文格式" class="headerlink" title="HTTP请求报文格式"></a><u>HTTP请求报文格式</u></h2><p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228165744419.png" alt="image-20231228165744419"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228165808206.png" alt="image-20231228165808206"></p>
+<p>请求报文的第一行是<strong>请求行（request line）</strong>，后继行叫做<strong>首部行（header line）</strong></p>
+<p>请求行有三个字段：<strong>方法字段（method）</strong>、<strong>URL字段</strong>、<strong>HTTP版本字段（version）</strong></p>
+<h3 id="请求行（request-line）"><a href="#请求行（request-line）" class="headerlink" title="请求行（request line）"></a><u>请求行（request line）</u></h3><p>可以取几种不同的值：GET、POST、HEAD（这几个都是1.0的）、PUT、DELETE（1.1有的）。大部分的http请求报文使用GET方法。 POST方法是向这个web页面输入内容 而URL字段后面就要包含输入内容，输入会被上传到服务器用过将数据放在实体体</p>
+<p>Head用来调试跟踪，PUT方法一般和Web发行工具一起使用，它允许用户上传对象到指定的Web服务器上指定的路径（目录）。</p>
+<p>GET方法是当一个浏览器请求对象的时候，使用这个，再在URL字段里面带上有请求对象的标识，上面就是 GET 方法 &#x2F;somedir&#x2F;page.html就是请求对象的表示，后面跟上的是目前的http版本</p>
+<h3 id="首部行（header）"><a href="#首部行（header）" class="headerlink" title="首部行（header）"></a><u>首部行（header）</u></h3><p>Host表示对象所在的主机，connection表示是否要使用持续连接 close表示服务器发送完请求对像后就关闭这一条连接。User-agent表示用户代理，也就是服务器发送请求的浏览器类型 Accept-language表示用户想要的对象的语言版本</p>
+<p>首部行后面的实体体（entity body）是用来当方法为POST时，你要POST的数据就放在这里</p>
+<p><del>其实也可以通过get方法上传数据的就是在URL后面加</del> </p>
+<h2 id="HTTP响应报文（response-message）"><a href="#HTTP响应报文（response-message）" class="headerlink" title="HTTP响应报文（response message）"></a><u>HTTP响应报文（response message）</u></h2><p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228172506371.png" alt="image-20231228172506371"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228172530367.png" alt="image-20231228172530367"></p>
+<p>这个响应报文有三个部分：一个是<strong>初始状态行（status line）</strong>，6个<strong>首部行</strong>，后面的是<strong>实体体</strong></p>
+<p>唯几不同的是 Server和Last-Modified Content-Length Content-Type</p>
+<p>Server：表示该报文是由什么服务器产生的类似于User-agent</p>
+<p>Last-Modified:表示对象创建或者最后修改的日期和时间</p>
+<p>CL：表示被发送对象中的字节数</p>
+<p>CT：表示实体体中的对象类型</p>
+<h3 id="初始状态行"><a href="#初始状态行" class="headerlink" title="初始状态行"></a><u>初始状态行</u></h3><p>200 OK：表示请求成功，消息在返回的响应报文中</p>
+<p>301 Moved Permanently：请求对象已经被永久转移了，新的URL定义在响应报文的Location:首部行中。客户软件将自动获取新的URL</p>
+<p>400 Bad Request：一个通用差错代码，指示该请求不能被服务器理解</p>
+<p>404 Not Found：被请求的文档不在服务器上。</p>
+<p>505 HTTP Version Not Supported：服务器不支持请求报文使用的HTTP协议版本。</p>
+<h3 id="用户于服务器的交互：cookie"><a href="#用户于服务器的交互：cookie" class="headerlink" title="用户于服务器的交互：cookie"></a><u>用户于服务器的交互：cookie</u></h3><p>HTTP服务器是无状态的，这就简化了服务器的设计（少个高自定义化的功能），这样子工程师们就可以去开发能响应更多tcp请求的高性能web服务器了，但是作为服务器而言，如果要是有记忆的化（比如说记录下上一次用户的习惯，或者上一次登陆密码），对于服务器端和客户端都是更加有效的，但是上述的前提不能摒弃，这个状态记录的key在哪呢，反正服务器端不能记录</p>
+<p>所以说http使用了cookie，多数cookie有这四个部件</p>
+<p>①在HTTP响应报文中的一个cookie首部行；②在HTTP请求报文中的一个cookie首部行；③在用户端系统中保留有一个cookie文件，并由用户的浏览器进行管理；④位于Web站点的一个后端数据库。</p>
+<p>假设Susan总是从家中PC使用Internet Explorer 上网，她首次与Amazon.com联系。我们假定过去她已经访问过eBay站点。当请求报文到达该Amazon Web服务器时，该Web站点将产生一个唯一识别码，并以此作为索引在它的后端数据库中产生一个表项。接下来Amazon Web服务器用一个包含Set-cookie：首部的HTTP响应报文对Susan的浏览器进行响应，其中Set-cookie：首部含有该识别码。 例如，该首部行可能是 Set-cookie: 1678</p>
+<p>每次你都带有一个key（第一次是服务器分配一个key给你），就是那个cookie的识别码，然后哦下一次访问的时候，服务器拿这个key去数据库找记录，没找到就建立映射关系，找到了就那这个返回</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228190300245.png" alt="image-20231228190300245"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228190426688.png" alt="image-20231228190426688"></p>
+<p>cookie用来表示一个用户，首次访问一个站点时，可能需要提供一个用户标识（可能是名字），后续会话的时候，浏览器向服务器发送cookie首部，所以这个实际上不是在http协议上进行更改 注意：</p>
+<p><strong>http定义了这些报文的结构以及客户和服务器进行报文交换的方式</strong></p>
+<p>所以cookie相当于在无状态的http上建立了一个用户会话层。当然有cookie的话也说明服务器端那边是掌握了用户的隐私信息的，所以的话也有安全上的问题</p>
+<h2 id="Web缓存（Web-cache）"><a href="#Web缓存（Web-cache）" class="headerlink" title="Web缓存（Web cache）"></a><u>Web缓存（Web cache）</u></h2><p>web缓存器也叫<strong>代理服务器（proxy server）</strong>，它是能够<u>代表初始web服务器来满足http请求的网络实体</u> 它有自己的磁盘存储空间，并存储了最近请求过的对象的副本（也就是copy）</p>
+<p>这个的流程和作用是这样的，大家先优先去找当前资源的代理服务器，可能主服务器太远了或者很忙碌，这个代理服务器也就是主服务器的代替品，如果上面有这个资源的副本（也就是之前其他人访问过的他保存下来），那么就可以不去找主服务器要资源了，直接把这个发给他，如果没有的话代理服务器再去找主服务器要，他要到之后存在自己这里然后再发给客户。在这个过程中代理服务器既是服务器端，也是客户端</p>
+<p>也就是用户所有http请求都会先指向web缓存器</p>
+<p>举例来说，假设浏览器正在 请 求对象 http :〃<a target="_blank" rel="noopener" href="http://www.someschool/">www.someschool</a>. edu&#x2F; campus, gif,将会发生如下情况： </p>
+<p>1）浏览器创建一个到Web缓存器,客户通过Web缓存器请求对象 的TCP连接，并向Web缓存器中的对象发送一个HTTP请求。 2） Web缓存器进行检查，看看本地是否存储了该对象副本。如果有，Web缓存器就 向客户浏览器用HTTP响应报文返回该对象。 3） 如果Web缓存器中没有该对象，它就打开一个与该对象的初始服务器（即 WWW. someschool. edu）的TCP连接。Web缓存器则在这个缓存器到服务器的TCP连接上发 送一个对该对象的HTTP请求。在收到该请求后，初始服务器向该Web缓存器发送具有该 对象的HTTP响应。 4） 当Web缓存器接收到该对象时，它在本地存储空间存储一份副本，并向客户的浏览 器用HTTP响应报文发送该副本（通过现有的客户浏览器和Web缓存器之间的TCP连接）。 值得注意的是Web缓存器既是服务器又是客户。</p>
+<p>部署原因上面说过了：web缓存器大大减少了对客户请求的响应时间，特别是当客户与初始服务器之间的瓶颈带宽远低于代理服务器与客户之间的。其次代理服务器能够大大减少一个机构的接入链路到因特网的通信量。再是，互联网密集的缓存:使“可怜的”内容提供者能够有效地提供内容(P2P文件共享也是如此)</p>
+<h3 id="条件GET"><a href="#条件GET" class="headerlink" title="条件GET"></a>条件GET</h3><p>上面的方法虽然可以解决响应时间等问题，但是也有个漏洞，要是代理版本是老版本咋办，新版本已经修改了，因此HTTP协议里面还有一个机制，也就是<strong>条件GET（conditional GET）</strong>方法。</p>
+<p>如果1.请求报文使用GET方法；且2.请求报文中包含一个“If-Modified-Since” 首部行，那么这个GET就是条件GET</p>
+<p>时隔一段时间后，用户再次请求资源的话，代理服务器会发送一个条件GET执行最新检查</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228193047632.png" alt="image-20231228193047632"></p>
+<p>就告诉源服务器（主服务器），要是指定日期后对象被修改过，才发送该对象。没被修改的话主服务器就发个这个响应报文</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228193227953.png" alt="image-20231228193227953"></p>
+<p>修改了发200和数据（放在实体体里面）</p>
+<h2 id="电子邮件"><a href="#电子邮件" class="headerlink" title="电子邮件"></a><u>电子邮件</u></h2><p>电子邮件系统由3个主要组成部分组成：<strong>用户代理（User agent）</strong>、<strong>邮件服务器（mail server）</strong>和<strong>简单邮件传输协议（simple mail transfer protocol，SMTP）</strong></p>
+<p>用户代理允许用户阅读、回复、转发、保存和撰写报文（就是用户能干的事情都在这里）。要发的时候邮件代理将邮件往邮件服务器发（类似于邮局一样的，和路由类似），阅读的时候用户代理在他的邮件服务器的邮箱中取得报文</p>
+<p>每个接收方<strong>邮箱服务器（mail servers）</strong> 里面都有<strong>邮箱（mailbox）</strong>，负责管理和维护发送的报文</p>
+<p>从发送方的用户代理开始，传输到发送方的邮件服务器，再传输到接收方的邮件服务器，然后在这里被分发到接收方的邮箱中。</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228194055993.png" alt="image-20231228194055993"></p>
+<p>要是当前的发送方服务器不能将邮件交给接收方服务器，那么就放在发送方的<strong>报文队列（message queue）</strong>中 30分钟试着发一次，要是几天后还没发成功，服务器就删除这个报文并且以邮件的方式告诉发送方</p>
+<h3 id="SMTP"><a href="#SMTP" class="headerlink" title="SMTP"></a><u>SMTP</u></h3><p>像大多数应用层协议一样，SMTP有两个部分：运行在发送方邮件服务器的客户端和运行在接收方邮件服务器的服务器端。每台上既有他的客户端也有服务器端，发送的时候就是客户端，接收的时候就是服务器端</p>
+<p>他是电子邮件的核心并且时代久远（比HTTP久），它限制邮件报文的体部分只能使用asc2的7比特进行表示，发送多媒体数据的时候还有将数据转成asc2，接收再解码</p>
+<p>例子过程</p>
+<p>1） Alice调用她的邮件代理程序并提供Bob的邮件地址（例如bob® someschool. edu）, 撰写报文，然后指示用户代理发送该报文。 </p>
+<p>2） Alice的用户代理把报文发给她的邮件服务器，在那里该报文被放在报文队列中。</p>
+<p>3） 运行在Alice的邮件服务器上的SMTP客户端发现了报文队列中的这个报文，它就 创建一个到运行在Bob的邮件服务器上的SMTP服务器的TCP连接。 </p>
+<p>4） 在经过一些初始SMTP握手后，SMTP客户通过该TCP连接发送Alice的报文。 </p>
+<p>5） 在Bob的邮件服务器上，SMTP的服务器端接收该报文。Bob的邮件服务器然后将 该报文放入Bob的邮箱中。 </p>
+<p>6） 在Bob方便的时候，他调用用户代理阅读该报文。</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228195206867.png" alt="image-20231228195206867"></p>
+<p>对于SMTP他没有所谓的中间服务器（没有转发），就是不管他们两个在天涯海角，这个发送过程都是直达的。这样其实是有好处的，如果Bob这个b他的邮件服务器没开机的话，A的邮件只会待在自己的邮件服务器里面重新尝试发送，他不会在别的中间服务器里面残留，有一定的安全性。最开始先握手，然后传送信息，最后关闭</p>
+<p>SMTP客户与SMTP服务器之间交换报文案例</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228201427060.png" alt="image-20231228201427060"></p>
+<p>客户主机名是crepe.fr 服务器主机名是 hamburger.edu</p>
+<p>以C：开头的ASCII码文本行正是客户交给其TCP套接字的那些行</p>
+<p>以S：开头的ASCII码则是服务器发送给其 TCP套接字的那些行</p>
+<p>客户发送了5个命令 C前面大写的那几个就是命令（HELO，MAIL FROM，RCPT TO，DATA，QUIT）这几个都是自解释的命令（意思就是看这个命令的命名就知道是干啥的了）用户发点“.”的那个表示用户没话说了，告诉服务器这个报文结束了。（按照ASCII码的表示方法，每个报文以CRLF. CRLF结束，其中的CR和LF分别表示回车和换行。）</p>
+<p>每个回答有一个回答码和一些文字，这里的SMTP是连续的，不会说一个命令发一个tcp请求 如果发送邮件服务器有几个报文发往同一个接收邮件服务器，那就通过一个tcp连接发送所有报文</p>
+<p>用户都是使用MAIL FROM开始的</p>
+<h3 id="对比HTTP"><a href="#对比HTTP" class="headerlink" title="对比HTTP"></a>对比HTTP</h3><p>HTTP是从一个web服务器向一个web客户发送报文的（你叫对象也行），每个对象封装在响应报文里面</p>
+<p>SMTP是一个邮件服务器向另外一个邮件服务器发送报文。二者都可以使用持续连接，所以就有一些共性，在多部分消息中发送多个对象</p>
+<p>HTTP是<strong>拉协议（pull protocol）</strong> 就是web服务器上先装载信息，然后用户使用HTTP从服务器拉过来，因为<strong>tcp连接是客户端发起的</strong></p>
+<p>SMTP可以说是一个<strong>推协议（push protocol）</strong>，是发送端服务器把文件推向接收方服务器的，因为<strong>tcp连接是由发送方发起的</strong></p>
+<p>换句话说就是二者的区别就是一个对于数据请求的主被动</p>
+<h3 id="邮件报文格式"><a href="#邮件报文格式" class="headerlink" title="邮件报文格式"></a>邮件报文格式</h3><p>SMTP是一个交换邮件报文的协议</p>
+<p>RFC5322 是文本报文的标准格式</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228203514568.png" alt="image-20231228203514568"></p>
+<p>首部行包含去哪的，来自哪的，subject表示内容</p>
+<h2 id="邮件访问协议（mail-access-protocol）"><a href="#邮件访问协议（mail-access-protocol）" class="headerlink" title="邮件访问协议（mail access protocol）"></a><u>邮件访问协议（mail access protocol）</u></h2><p>意如其名，规定访问的时候干啥的协议</p>
+<p>按照上面的例子Bob是从自己的端系统上登陆自己的邮件服务器，然后运行一个阅读程序来阅读的。上面讲的用户代理程序和邮件服务器可以在B自己的机子上跑的</p>
+<p>但是他自己的机子又不会永远开机，所以说邮件服务器一般是别的机构运营维护的</p>
+<p>一般而言A的代理邮件服务器是使用SMTP讲报文发给B的邮件服务器的</p>
+<p>那么B在自己的端系统上运行的用户代理程序怎么获取在邮件服务器上的邮件呢，SMTP肯定不行，因为SMTP是推协议，让我邮件服务器推给B的话又会出现上面的问题</p>
+<p>所以肯定是B的用户代理发出拉的请求</p>
+<p>所以这里的协议也要是拉的协议 <strong>HTTP</strong>就可以</p>
+<p>除了HTTP还有<strong>第三版的邮局协议（Post Office Protocol–Version 3，POP3）</strong>、<strong>因特网邮件访问协议（Internet Mail Access Protocol，IMAP）</strong></p>
+<h3 id="POP3"><a href="#POP3" class="headerlink" title="POP3"></a><u>POP3</u></h3><p>比较简单，所以功能有限，建立完tcp后，他会先<strong>特许（authorization）</strong>也就是用户代理发送用户名和口令（密码？）来鉴别你是谁</p>
+<p>然后<strong>事务处理阶段</strong>，用户代理去回报文，它还可以删除报文的标记，取消报文删除标记，或者获取报文的统计信息</p>
+<p>最后<strong>更新阶段</strong>，发出quit命令，结束POP3会话，邮件服务器删除那些被标记为删除的报文</p>
+<p>我对于邮件可以选择下载并删除（删除邮件服务器的副本）或者下载并保留</p>
+<p>你要是删除了，下次你换个端系统访问的话就没这个邮件了，在POP3会话中服务器不携带状态信息<strong>（无状态stateless）</strong></p>
+<h3 id="IMAP"><a href="#IMAP" class="headerlink" title="IMAP"></a><u>IMAP</u></h3><p>B将邮件下到本地主机后，他就能建立邮件文件夹，然后把文件放进去，但是你下次换机子访问可能就对不上了</p>
+<p>这个IMAP服务器把每个报文和文件夹相联系，IMAP提供用户创建文件夹以及转移邮件地址的操作，那么<strong>IMAP就要维护IMAP会话的用户状态信息</strong>和POP3不同</p>
+<p>还有一个特性就是他允许用户部分获取报文，用户可以只看首部的，对于那种链路宽带比较低的用户，这就可以派上用场了</p>
+<h2 id="DNS-Domain-name-system域名解析系统"><a href="#DNS-Domain-name-system域名解析系统" class="headerlink" title="DNS Domain name system域名解析系统"></a><em><u>DNS Domain name system域名解析系统</u></em></h2><p>将主机名和IP地址做映射</p>
+<p>一个由分层的DNS服务器实现的分布式数据库   一个使得主机可以查询分布式数据库的应用层协议</p>
+<p>干的几件事情</p>
+<ul>
+<li><strong>主机别名（host aliasing）</strong>意如其名</li>
+<li><strong>邮件服务器别名（mail server aliasing）</strong>和上面同理</li>
+<li><strong>负载分配（load distribution）</strong>要是现在访问的这个服务器好像有点满了（一个别名对应多个IP地址 也就是多个服务器），那我就给他换一个</li>
+</ul>
+<p>单个DNS服务器的话会出问题的</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228210558493.png" alt="image-20231228210558493"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228210605760.png" alt="image-20231228210605760"></p>
+<p>所以要分布式的有层次的数据库</p>
+<p>有三种</p>
+<p><strong>根DNS服务器</strong>（root）：提供TLD服务器的IP地址</p>
+<p><strong>顶级域（DNS）服务器</strong>（Top-level Domain，TLD）：提供权威DNS服务器的IP</p>
+<p><strong>权威DNS服务器</strong>提供DNS记录，这些记录将这些主机名映射成IP地址</p>
+<p>还有一个<strong>本地DNS服务器</strong>（local）但他不包含在上述的服务器层次结构中</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228211637815.png" alt="image-20231228211637815"></p>
+<p>这个DNS查询就贯彻一个<strong>递归查询（recursive query）</strong>和<strong>迭代查询（iterative query）</strong></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228211912597.png" alt="image-20231228211912597"></p>
+<p>从cse. nyu. edu到dns. nyu. edu发出的查询是递归查询，因为该查询以自己的名义请求 dns. nyu. edu来获得该映射。而后继的3个查询是迭代查询，因为所有的回答都是直接返 回给dns. nyu. eduo从理论上讲，任何DNS 查询既可以是迭代的也能是递归的。</p>
+<h3 id="DNS缓存"><a href="#DNS缓存" class="headerlink" title="DNS缓存"></a><u><em>DNS缓存</em></u></h3><p>对于每个DNS服务器而言都有这个操作，每次请求完DNS查找后，它就将这个回答缓存到本地存储器里面，但一般而言主机和主机名与IP地址之间的映射不是永久的，所以DNS服务器每过两天（可以设置）就丢弃缓存的信息</p>
+<p>DNS服务器里面存储了<strong>资源记录（resource record，RR）</strong> RR提供了主机名到IP的映射</p>
+<p>资源记录是一个包含了一些字段的4元组</p>
+<p>(Name,Value,Type,TTL)</p>
+<p>TTL表示该记录的生存时间，决定这条记录应当从缓存中删除的时间，目前先忽略这个字段 Name和Value的值，因为他们都取决于取决于Type</p>
+<h4 id="A"><a href="#A" class="headerlink" title="A"></a><u>A</u></h4><p>要是type是A，<strong>name就是主机名，Value是该主机名对应的IP地址</strong></p>
+<p>(Tayl.bar.foo.com,145.37.93.126, A)</p>
+<h4 id="NS"><a href="#NS" class="headerlink" title="NS"></a><u>NS</u></h4><p>这种情况，<strong>Name就是个域（eg：foo.com），而Value是个知道如何获取该域中主机IP地址的权威DNS服务器的主机名</strong></p>
+<p>(foo.com,dns.foo.com, NS)</p>
+<h4 id="CNAME"><a href="#CNAME" class="headerlink" title="CNAME"></a><u>CNAME</u></h4><p><strong>Value是别名Name的主机对应的规范主机名。</strong> 该记录能够向査询的主机提供一个主机名对应的规范主机名</p>
+<p>(foo.com,relay1.bar.foo.com,CNAME)</p>
+<h4 id="MX"><a href="#MX" class="headerlink" title="MX"></a><u>MX</u></h4><p><strong>Value是个别名为Name的邮件服务器的规范主机名</strong></p>
+<p>(foo.com,mail.bar.foo.com,MX)</p>
+<h3 id="DNS报文格式"><a href="#DNS报文格式" class="headerlink" title="DNS报文格式"></a>DNS报文格式</h3><p>DNS只有两种报文：查询和回答报文 二者有着相同的格式</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228213723133.png" alt="image-20231228213723133"></p>
+<p>前12字节是首部区域 1比特的标识位指出报文是查询报文 0查询 1回答</p>
+<p>问题区域包含正在进行的查询信息</p>
+<p>①名字字段，包含正在被查询 的主机名字；②类型字段，指出有关该名字的正被询问的问题类型，例如主机地址 是与一个名字相关联（类型A）还是与某个名字的邮件服务器相关联（类型MX</p>
+<p>…</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231228214007788.png" alt="image-20231228214007788"></p>
+<h1 id="Chapter3运输层"><a href="#Chapter3运输层" class="headerlink" title="Chapter3运输层"></a>Chapter3运输层</h1><h2 id="传输服务和协议"><a href="#传输服务和协议" class="headerlink" title="传输服务和协议"></a><u>传输服务和协议</u></h2><p>协议为运行在不同主机上的应用程序之间提供了<strong>逻辑通信（logic communication）</strong>的功能，从<u>应用程序</u>角度出发，貌似是连起来了，但只是逻辑上的，实际上就没连起来（物理层面上）或者说没有直接连上，因为他们之间还连了&gt;&#x3D;1个的“中间”节点</p>
+<p>这个运输层协议是在端系统中而不是在路由器上实现的，在发送端运输层将发送应用程序进程接收到的报文转换成运输层分组 这里叫<strong>报文段（segment）</strong></p>
+<p>在这一层里面只有两个协议 TCP以及UDP</p>
+<p>在发送方，他们将应用的<strong>报文（message）</strong>切成<strong>报文段（segments）</strong>，然后把报文段传递到网络层。（不同层对于数据包的称号都不一样，一定要注意）</p>
+<p>在接收方（rcv side），从<em>下层</em>得到数据，再重新将报文段（segment）组装成报文（message），将他传递到上层的应用层</p>
+<h3 id="运输层VS网络层"><a href="#运输层VS网络层" class="headerlink" title="运输层VS网络层"></a>运输层VS网络层</h3><p>在协议栈中，运输层在网络层上方，网络层提供<strong>主机</strong>之间的逻辑通信</p>
+<p>运输层提供的是不同主机上<strong>进程</strong>之间的逻辑通信</p>
+<p>类比：</p>
+<p>Ann家的12个孩子给Bill家的12个孩子寄信:</p>
+<p>主机&#x3D; house</p>
+<p>进程&#x3D;孩子</p>
+<p>应用程序消息&#x3D;信封中的信件</p>
+<p>传输协议&#x3D; Ann和Bill，他们在内部兄弟姐妹之间交换</p>
+<p>网络层协议&#x3D;邮政服务</p>
+<p>不是啥重点就不讲了</p>
+<h3 id="传输层概述"><a href="#传输层概述" class="headerlink" title="传输层概述"></a><u>传输层概述</u></h3><p>UDP（用户数据报协议）是不可靠的（unreliable）unordered delivery、无连接的服务 尽力而为，也就是链路层的IP协议套了一层壳</p>
+<p>TCP（传输控制协议）是可靠的、面向连接的服务</p>
+<p>网络层有一个IP协议也就是网际协议，IP的服务模型是<strong>尽力而为交付服务（best-effort delivery service）</strong>，也就是尽最大努力在通信主机之间交付报文段，但它不做任何<em>确保</em>。所以IP是<strong>不可靠服务</strong></p>
+<p>TCP和UDP功能就是将主机间交付（IP）扩展到进程之间的交付</p>
+<p>而这个过程叫做<strong>运输层的多路复用（transport-layer multiplexing）</strong>和<strong>多路分解（demultiplexing）</strong></p>
+<p>最低限度的运输层服务是<u>进程到进程之间的数据交付</u>和<u>差错检查</u>，UDP也只有这两项服务</p>
+<h3 id="多路复用和多路分解（multiplexing和de-）"><a href="#多路复用和多路分解（multiplexing和de-）" class="headerlink" title="多路复用和多路分解（multiplexing和de-）"></a>多路复用和多路分解（multiplexing和de-）</h3><p>一个进程可能有一个或多个<strong>套接字（socket）</strong>，相当于网络向进程传递数据和从进程向网络传递数据的门户，所以说接收方的运输层只是将套接字传到进程而已</p>
+<p>怎么把运输层报文段定向到适当的套接字呢（套接字有唯一标识符，标识符格式取决于他是UDP还是TCP）。<u>将运输层报文段中的数据交付到正确的套接字的工作就是多路分解</u></p>
+<p>发送端从应用层套接字里获取数据，然后给这个数据包上面加点信息（首部信息），这时候报文（message）变成报文段（segement），这就叫多路复用</p>
+<p>说白了就是一个拆包装和封包装的过程</p>
+<p>多路复用的要求</p>
+<p>①套接字有唯一标识符</p>
+<p>②每个报文段有特殊字段来指示该报文段所要交付到的套接字</p>
+<p>这些特殊字段是源端口号字段(source port number field )和目的端口 号字段(destination port number field)。</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229165912703.png" alt="image-20231229165912703"></p>
+<p>端口号0-1023是周知端口号（well-known port），一般应用程序不能用，只是留给周知应用层协议使用的</p>
+<p>UDP的套接字是由一个二元组标识的 包含<strong>目的IP地址</strong>和<strong>目的端口号</strong>所以对于一个IP和post，可能UDP的套接字来自于不同的发送方，但是，他们有着相同的IP地址和端口号，所以他们都会交给一个套接字进行处理</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240103163736095.png" alt="image-20240103163736095"></p>
+<h3 id="面向连接复用"><a href="#面向连接复用" class="headerlink" title="面向连接复用"></a><u>面向连接复用</u></h3><p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240103163804423.png" alt="image-20240103163804423"></p>
+<p>TCP套接字又由一个四元组组成的，<strong>源IP地址</strong>，<strong>源端口号</strong>，<strong>目的IP地址</strong>，<strong>目的端口号</strong></p>
+<p>一个服务器主机可以支持多个同时的TCP套接字，有着不同的套接字对于每个客户端连接，接收端可以拿到多个套接字进行分解</p>
+<p>非持续的HTTP对于每一个请求，都会有一个套接字，创建完后也会关闭</p>
+<h2 id="UDP-User-Datagram-Protocol-用户数据报协议"><a href="#UDP-User-Datagram-Protocol-用户数据报协议" class="headerlink" title="UDP User Datagram Protocol 用户数据报协议"></a><u>UDP User Datagram Protocol 用户数据报协议</u></h2><p>如果啥也不做，只是提供复用&#x2F;分解的服务，那么就是发送方包装一下，直接发，接收方拆封一下，直接收</p>
+<p>使用UDP的过程中双方并没有握手去建立一个逻辑通信，所以UDP是无连接的</p>
+<p>DNS就是一个例子，一个主机的DNS应用想要进行查询时，它构造了一个DNS查询报文交给UDP，在做这个之前没有握手，没收到响应就换一台DNS服务器问，要不就告诉应用不能得到响应</p>
+<p>那么为啥不使用TCP呢 原因如下</p>
+<ul>
+<li>实时性，关于发送什么数据以及何时发送的应用层控制更为精细</li>
+<li>无须连接建立</li>
+<li>无连接状态，没有维护的成本也就是维护状态的缓存</li>
+<li>分组首部开销小，tcp有20字节作为首部开销，而UDP只有8字节</li>
+</ul>
+<p>UDP用于多媒体流应用，DNS，SNMP（网络管理数据）</p>
+<p>为了让UDP也好一点，就增加了个检验和的操作</p>
+<h3 id="UDP校验和-checksum"><a href="#UDP校验和-checksum" class="headerlink" title="UDP校验和 checksum"></a><u>UDP校验和 checksum</u></h3><p>查看比特是否发生了改变</p>
+<p>对发送方UDP所有16比特的和进行反码运算，任何溢出就回卷，意思就是溢出的往后排</p>
+<p>将所有比特相加起来 eg</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229183834439.png" alt="image-20231229183834439"></p>
+<p>原始数据是3行</p>
+<p>最后将相加结果做一次反码的操作，在接受方那里，他会把这4个数据全部向加，如果结果不是16个1，有0的话就说明有差错了</p>
+<p>UDP是在<strong>端到端</strong>的基础上提供差错检测的，必须端到端实现，所以说它在系统设计中称作<strong>端到端原则</strong>。</p>
+<p>虽然有端到端的差错检测，但是没有差错恢复</p>
+<h2 id="构造可靠数据传输协议"><a href="#构造可靠数据传输协议" class="headerlink" title="构造可靠数据传输协议"></a><em>构造可靠数据传输协议</em></h2><p>这几个rdt基本上考试不会涉及</p>
+<h3 id="rdt1-0"><a href="#rdt1-0" class="headerlink" title="rdt1.0"></a>rdt1.0</h3><p>前提就是信道完全可靠，所以就相当于我们只需要对于报文段往下面传送就行，接收方负责收就行</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229184716360.png" alt="image-20231229184716360"></p>
+<h3 id="rdt2-0"><a href="#rdt2-0" class="headerlink" title="rdt2.0"></a>rdt2.0</h3><p>信道中会有比特差错，换句话就是分组可能会受损，如果你说了一句很长的话，对方一般也会回答类似“我知道了”的话，如果你说的话不知道怎么了，他收到的他不懂，他就会让你再说一遍</p>
+<p>这分别对应了<strong>肯定确认（positive acknowledgment）</strong>和<strong>否定确认（negative acknowledgement）</strong>，那么接收方会想要你重复的请求操作就是<strong>自动重传请求（Automatic Repeat Request，ARQ）</strong>协议，意思就是他只会说“我不懂，我没接收到你的意思”，那么你就自动重说一遍你刚刚说的话</p>
+<p>这个<u>ARQ</u>还提供一个<strong>差错检测</strong>和<strong>接收方反馈</strong>（就是双方会发肯定确认（ack）以及否定确认（NAK）的分组）的操作，不只是重传</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229185445476.png" alt="image-20231229185445476"></p>
+<p>发送方是等到接收方收到了然后返回ACK之后，他才会发下一份分组，所以这个协议被叫做<strong>停等（stop-and-wait）</strong>协议</p>
+<h3 id="rdt2-1"><a href="#rdt2-1" class="headerlink" title="rdt2.1"></a>rdt2.1</h3><p>如果对方发的ack或者nak出现差错，你就重新发一份过去，如果你想实现数据差错后的恢复操作，你就要用冗余的数据（冗余提升可靠性）去恢复</p>
+<p>但是你的ack和nak没确定是哪个分组的，那接收方不知道你是收到了上一个包还是收到了现在这个包</p>
+<p>引入了<strong>序号（sequence number）</strong>这个玩意，就一个字段0 1，让双方知道对方接收到了啥，改的就是接收方向发送方确定的细节，所以也就解决了上面的问题</p>
+<h3 id="rdt2-2"><a href="#rdt2-2" class="headerlink" title="rdt2.2"></a>rdt2.2</h3><p>你会发现，当发送方在发1包的时候，对方回复ack0 和 nak1实际上表达的信息是一样的，那么我们就把nak这个概念删掉，就用一个ack不就行了吗，还能减少代码的逻辑量</p>
+<p>所以这个协议相比上一个版本就只是少了一个nak，要是接收方收到对一个分组的两个ack就说明，接收方没有收到这个分组后面的内容</p>
+<h3 id="rdt3-0"><a href="#rdt3-0" class="headerlink" title="rdt3.0"></a>rdt3.0</h3><p>现在信道更不靠谱了，会丢包了</p>
+<p>你不能确认你发出去的包对方能不能拿到了，可能对方不会给你回复（因为可能就没拿到你发的包），这个包可以是发送方的也可以是接收方的ack，那么我们用一个时间来衡量包有没有丢，丢了就重传</p>
+<p>要是实际上没丢，只是来的比较晚的话就把后面来重的丢了，接收方就再发一个ack，发送方就忽略冗余的ack 这些多的包就是<strong>冗余数据分组（duplicate data packet）</strong></p>
+<p>每次发的时候开始一个计时器，这个计时器叫做<strong>倒计数定时器（countdown）</strong></p>
+<h2 id="流水线（pipeline）"><a href="#流水线（pipeline）" class="headerlink" title="流水线（pipeline）"></a>流水线（pipeline）</h2><p>停等协议你每次只发一个，还要等ack包到了再发，信道利用率太低了，你发出去的时间加上对方接收到的时间&#x2F;从发到确定收到的时间就是利用率</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229192642428.png" alt="image-20231229192642428"></p>
+<p>流水线就是连续发送多个包，然后等到他们都确认后再发下一批分组</p>
+<p>对于重发分组有几种方法</p>
+<p><strong>回退N步（Go-Back-N）</strong>、<strong>选择重传（Selective Repeat，SR）</strong></p>
+<h3 id="Go-Back-N"><a href="#Go-Back-N" class="headerlink" title="Go-Back-N"></a>Go-Back-N</h3><p>允许发送方发送多个分组（当有多个分组可用时）而不需等待确认，但它也受限于在流水线中未确认的分组数不能超过某个最大允许数<strong>N</strong></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229193113686.png" alt="image-20231229193113686"></p>
+<p>因为上图，GBN也叫滑动窗口协议</p>
+<p>当上层调用发送的方法时，发送方会先看发送窗口满没满，没满就发一个，满了就直接返回给上层标识我满了</p>
+<p>收到ack是<strong>累计确认（cumulative acknowledge）</strong>的ack n，表示n以及n前面的包我都收到了，<strong>一个定时器，是记录最早已发送但未确认的包的</strong></p>
+<h3 id="选择重传-Selective-Repeat"><a href="#选择重传-Selective-Repeat" class="headerlink" title="选择重传 Selective Repeat"></a>选择重传 Selective Repeat</h3><p>没有累计确认，不止一个定时器（有几个包发了没确认的，就有几个）</p>
+<p>最开始的包收到ack了，窗口向后挪，挪到最早的没有确认的分组</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229194016813.png" alt="image-20231229194016813"></p>
+<p>接收方的包可能是失序的，所以他就拿这个长度为N的缓存器一样的玩意把他存起来，以后包到了再拼接起来，然后往后挪</p>
+<p>所以双方的窗口不是同步的，因为ack包的各种时延，还有二者的定义不太相同，一方是我将要发的，另一方是我想要收的，所以只会出现接收方比发送发要更靠前</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229194313594.png" alt="image-20231229194313594"></p>
+<h2 id="TCP-1"><a href="#TCP-1" class="headerlink" title="TCP"></a><u>TCP</u></h2><p>面向连接的可靠传输协议，有差错检测、重传、累计确认、定时器以及用于放序号和确认号的首部字段</p>
+<p>因为他在连接前有个<strong>握手</strong>的操作，所以它是<strong>面向连接的（connection-oriented）</strong>，相互发送某些预备报文段，用来建立确保数据传输的参数，二者都将会初始化与TCP连接相关的TCP状态变量</p>
+<p>为啥说是逻辑连接，因为他是只在端系统中运行，而不是在中间的网络元素里面，这些网络元素不会维护它的连接状态的，他们只能看到数据报（datagram）</p>
+<p>TCP是<strong>点对点（point-to-point）</strong>的连接，也就是一个接收方和一个发送方。</p>
+<p>还是<strong>全双工（full duplex data）</strong>的一个连接可以保证双向数据流，就是两边都能传数据</p>
+<p>发起连接的是<em>客户进程</em>，另一边就是<strong>服务器进程</strong></p>
+<p>每次握手要握3次，<strong>3次握手（three-way handshake）</strong></p>
+<p>进入套接字后，数据就交给tcp了，然后tcp会把它放在这个连接的<strong>发送缓存（send buffer）</strong>里面，tcp时不时会从发送缓存里面拿数据出来给网络层发，拿出来的数据长度受限于<strong>最大报文段长度（Maximum Segement Size，MSS）</strong>，保证一个TCP报文段加上TCP首部长度（20-60字节）要适合于单个链路层帧，所以说取决于<strong>最大链路层帧长度（M- Transmission Unit，MTU）</strong>，<u>注意MSS不包括TCP首部长度，只包括TCP报文段大小</u></p>
+<h3 id="TCP报文端结构"><a href="#TCP报文端结构" class="headerlink" title="TCP报文端结构"></a>TCP报文端结构</h3><p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229201708294.png" alt="image-20231229201708294"></p>
+<p>首部有源端口和目的地端口号，还有<strong>检验和字段（checksum field）</strong></p>
+<p>还有 32比特的<strong>序列字段（sequence number field）</strong>和32比特的<strong>确认号字段（acknowledge number field）</strong> 16比特的<strong>接收窗口字段（receive window field）</strong> ：用来做流量控制，表示接收方愿意接受的字节数量 </p>
+<p>4比特的<strong>首部长度字段（header length field）</strong>，因为是可以变长度的所以这里要有一个这个</p>
+<p>可选与变长的<strong>选项字段（options field）</strong> 发送方和接收方协商的最大报文段长度（MSS）或者高速网络环境下用来当作窗口调节因子的，还能有一个时间戳选项</p>
+<p>6比特等到<strong>标志字符（flag field）</strong> 比如说ack比特 RST、SYN、FIN是用来做连接建立和拆除的 拥塞使用CWR和ECE比特。 若PSH比特被置位，表示接收方立即将数据交给上层 URG比特用作指示报文段中存在被发送端的上层实体置为“紧急”的数据</p>
+<p>16比特的紧急数据指针字段告诉你紧急的数据在哪</p>
+<h4 id="序号和确认号"><a href="#序号和确认号" class="headerlink" title="序号和确认号"></a><u>序号和确认号</u></h4><p>可靠传输服务的关键，序号是建立在传送的字节流上，而不是建立在报文段的序列号上，所以说<u><strong>一个报文段的序号是报文段首字节的字节流编号</strong></u></p>
+<p>假定数据流由一个 包含500 000字节的文件组成，其MSS为1000字节，数据流的首字节编号是0。该TCP将为该数据流构建500个报文段。给第一个报文段分配序号0,第二个报文段分配序号1000,第三个报文段分配序号2000,以此类推。每一个序号被填入到相应TCP 报文段首部的序号字段中。</p>
+<p>确认号比序号难处理，由于是全双工的那么你发的话，你也会收，把么对于一个主机A来说，他报文段的确认号就是A希望能从对方收到的下一字节的编号</p>
+<p>他的ack永远是对于**<u>当前n字节前</u>**的数据的ack，和GBN的累计确认一样，但是他不包括n 因为他考虑了第一个包的ack</p>
+<h3 id="捎带（piggybacked）"><a href="#捎带（piggybacked）" class="headerlink" title="捎带（piggybacked）"></a>捎带（piggybacked）</h3><p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229204019239.png" alt="image-20231229204019239"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231229204033725.png" alt="image-20231229204033725"></p>
+<p>我的ack和我要传的数据放一起给你 这就叫<strong>捎带</strong></p>
+<h3 id="往返时间的估计以及超时"><a href="#往返时间的估计以及超时" class="headerlink" title="往返时间的估计以及超时"></a><u>往返时间的估计以及超时</u></h3><p>前面说到tcp是怎么检查是否丢包的，要不就是冗余ack，要不就是超时</p>
+<p>对于超时来讲你总要有个标准，怎么合理的衡量超时呢</p>
+<p>报文段的<strong>样本RTT（sampleRTT）</strong><u>就是从某报文段被发出到报文段确认被收到的时间量</u>，意思就是拿某一段时间的RTT进行衡量。一般来讲，tcp都是再某一时刻做一次这个样本RTT的测量，不是每一个报文段都是一个样本RTT的测量对象</p>
+<p>在任意时刻仅<em>会为一个已发送但还没有被确认的报文段估计样本RTT</em></p>
+<p>并且这个报文段不会是重发的（重发可能说明目前链路有点问题，你要是把他纳入考虑的话这个估计的RTT就会有偏差于平均情况），他只为<u>传输一次的报文段测量样本RTT</u></p>
+<p>当然也有可能还不是重发的，但是RTT还是很大（只是没超时而已），那么你要减少这样的影响就取个平均值，所以真正的EstimatedRTT会考虑前一个状态的ERTT和目前SRTT的影响，至于怎么影响，就是设计一个权重α</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230171729952.png" alt="image-20231230171729952"></p>
+<p>其实可以把这个权重（1-α）当作学习率去看，其中的α推荐是1&#x2F;8</p>
+<p>这个加权是要更多的考虑最近的样本，而不是曾经的</p>
+<p>这种平均叫做为<del>指数加权移动平均（Exponential Weighted Moving Average, EWMA）</del></p>
+<p>那么此时我们得到了一个平均值（一般情况下的RTT），那么超时的界限怎么衡量呢，当然肯定无法保证全部的超时的都是丢包的情况，也有可能就是链路拥塞了而已，那么怎么更大可能的保证是这样的呢</p>
+<p>既然有了平均值，你又要考虑一个概率的问题，我们会想到正态分布</p>
+<p>你加上几个方差之后，基本上接近100%了</p>
+<p>所以超时的界限就是这样</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230172457644.png" alt="image-20231230172457644"></p>
+<h3 id="可靠数据传输"><a href="#可靠数据传输" class="headerlink" title="可靠数据传输"></a><u>可靠数据传输</u></h3><p>TCP是在IP不可靠的尽力而为的服务之上创建了一种<strong>可靠数据传输服务</strong></p>
+<p>重传定时器的话最好还是一个，不然比较耗内存，这也是为啥一般tcp选择累计确认的原因之一，他也是使用流水线协议的</p>
+<p>几种情况</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230173108119.png" alt="image-20231230173108119"></p>
+<p>要是超时计时器时间太长了，即使中间有一个ack丢失了，但是下一个累计确认的包来了，发送方也会发下一波，这里计时器时间短了也是同理</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230173244704.png" alt="image-20231230173244704"></p>
+<p><strong><u>快速重传</u></strong> 收到3个<strong>冗余ack（duplicate ack）</strong>直接重传那怕还没超时，我收到多个ack就说明链路带宽应该是没问题的（说明流水线协议传的后面的包是到了的），要是没丢这个包的话早就到了，所以大概率是丢了，即使我这边的计时器还没超呢，所以我就停下继续流水线传的包，先把这个大概率丢的包重新传了先</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240103170637778.png" alt="image-20240103170637778"></p>
+<p>目前来讲，tcp还可以使用的<strong>选择确认（selective acknowledge）</strong> 类似于GBN和SR的杂交，他是允许tcp有选择地确认失序的报文，而不是累积地确认最后一个正确接收的有序报文段</p>
+<h3 id="TCP流控制（flow-control）"><a href="#TCP流控制（flow-control）" class="headerlink" title="TCP流控制（flow control）"></a><u>TCP流控制（flow control）</u></h3><p>TCP为两方的主机都设置了接收缓存，当TCP收到正确、按序的字节后，就会把数据放入接收缓存，应用从中读取数据、而不是数据一到就读。</p>
+<p>所以说有时候读取的慢了，而发送方发的太多太快，这个缓存可能就溢出了</p>
+<p>所以TCP给应用提供流量控制。为了保证发送方使得接收方缓存溢出。所以它是一个<em>速度匹配服务</em>，使得双方匹配速率。</p>
+<p>TCP通过让<em>发送方</em>维护一个<strong>接收窗口（receive window）</strong>来进行流量控制。也就是说接收窗口会告诉发送方自己还有多少缓存空间。由于TCP是<strong>全双工的</strong>，所以说双方都有这个接收窗口</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230194219837.png" alt="image-20231230194219837"></p>
+<p>rwnd是动态的，也就是空间随时间变化</p>
+<p>连接是如何使用变量rwnd来提供流量控制服务的呢？主机B通过把当前的 rwnd值放入它发给主机A的报文段接收 窗口字段中，通知主机A它在该连接的缓存中还有多少可用空间。开始时，主机B设定rwnd &#x3D; RcvBuffer</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230194413869.png" alt="image-20231230194413869"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230194637280.png" alt="image-20231230194637280"></p>
+<h3 id="TCP连接管理"><a href="#TCP连接管理" class="headerlink" title="TCP连接管理"></a><u>TCP连接管理</u></h3><p>TCP如何建立和拆除TCP连接</p>
+<p>假设运行 在一台主机（客户）上的一个进程想与另一台主机（服务器）上的一个进程建立一条连接。客户应用进程首先通知客户TCP，它想建立一个与服务器上某个进程之间的连接。</p>
+<p>首先 客户端TCP会向服务器端的TCP发送一个特殊的TCP报文段。这个报文段里面没有应用层数据。但在报文段首部的一个<strong>标志位SYN会被置为1</strong>。然后客户端会随机选择一个初始序号，并且把这个放在起始TCP的SYN报文段的序号字段中。</p>
+<p>然后TCPSYN报文段数据到了主机以后，服务器会为这个TCP连接分配TCP缓存和变量，并且会给这个客户TCP发送允许连接的报文段，但是其中不会包括应用层数据，但是其中的<strong>SYN比特置为1</strong>，这个报文段的<strong>确认号字段就是客户端初始序号+1</strong>。既然客户端的初始序号你知道了，别人也需要知道你的初始序号，所以你会发送你的<strong>初始序号</strong>。这个允许连接的报文端被叫做<strong>SYNACK报文段</strong></p>
+<p>最后，客户端收到SYNACK后，客户也会给这个连接分配缓存和变量。然后客户端会向服务器发送另外一个报文段，这个报文段也就对服务器允许连接的报文段进行了确认（该客户通过将值serverisn + 1放置到TCP报文段首部的确认字 段中来完成此项工作）。因为连接建立，那么以后SYN比特就是0了，这里的SYN也是0，此时就可以捎带上你的数据了，就放在应用层数据里面</p>
+<p>注意其中标志位中的ACK比特在第二三次都是1</p>
+<p>这就是<strong>三次握手（three-way handshake）</strong></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230200216283.png" alt="image-20231230200216283"></p>
+<p>最后，拆除连接。</p>
+<p>客户打算关闭连接，客户就发一个特殊的TCP报文段，在其中把标志位的FIN比特置为1，服务器收到了就发送回一个确认报文段，然后服务器那边自己再发一个这样的FIN包，两边都进行一次单边的关闭就行了这就是<strong>4次挥手</strong>，FIN包中的FIN比特会被置为1 ACK包中的ACK比特被置为1，二者都有自己的seq，比如说FIN的seq是x，那么ACK的就是x+1，另一边的关闭也是同理</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230201232585.png" alt="image-20231230201232585"></p>
+<p>SYN泛洪跳过</p>
+<h3 id="TCP拥塞控制的方法"><a href="#TCP拥塞控制的方法" class="headerlink" title="TCP拥塞控制的方法"></a><u>TCP拥塞控制的方法</u></h3><p>网络链路总是充斥着不稳定的因素，有时候网络变得拥塞（也就是路由器缓存溢出）的时候，就会出现丢包，你总不能遇到这种情况还是一个速率传吧，不然老是需要重传。</p>
+<p>首先是<strong>端到端拥塞控制</strong>，你不能直观的知道他有没有堵塞，只有超时和3个冗余ack的时候才能得到拥塞的信息，那么就会所见窗口长度</p>
+<p><strong>网络辅助的拥塞控制</strong>。在网络辅助的拥塞控制中，路由器向发送方提供关于网络 中拥塞状态的显式反馈信息。</p>
+<p>发送方会跟踪一个额外变量，<strong>拥塞窗口（congestion window）</strong>，限制发送方能向网络中发送流量的速率。一个发送方中未被确认的数据量不会超过cwnd和rwnd的最小值</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230203149602.png" alt="image-20231230203149602"></p>
+<p>这个算法包括3个部分：<strong>①慢启动；②拥塞避免; ③快速恢复</strong></p>
+<h4 id="慢启动-slow-start"><a href="#慢启动-slow-start" class="headerlink" title="慢启动 slow-start"></a><u>慢启动 slow-start</u></h4><p>慢启动cwnd会以一个MSS的增幅开始，每次一个传输的报文段被确认就来一次。因为是对于每个ack的到来都会增加一个MSS，所以他是成倍增加（要是中间没有拥塞）</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240103172156302.png" alt="image-20240103172156302"></p>
+<p>那么什么时候结束呢，如果中间存在一个丢包事件，那么cwnd会被设置为1，再次慢启动。并且他还有一个<strong>慢启动阈值ssthresh</strong>，它被设置为cwnd&#x2F;2，检测到拥塞就会被这样设置。</p>
+<h4 id="拥塞避免-congestion-avoidance"><a href="#拥塞避免-congestion-avoidance" class="headerlink" title="拥塞避免 congestion avoidance"></a><u>拥塞避免 congestion avoidance</u></h4><p>你再次启动的时候要是增加到过了这个阈值就不会那样成指数增加了，这时候进入<strong>拥塞避免</strong></p>
+<p>每次增加一个MSS&#x2F;cwnd的字节，也就是你每次发送后，<strong>这一批的ack到达就增加1个MSS</strong>，要是增加到了超时的时候，cwnd立刻变成1和慢启动一样，然后ssthresh为当前cwnd&#x2F;2</p>
+<p>超时的话，进入慢启动，ssthresh为当前cwnd的一半</p>
+<h4 id="快速恢复-fast-recovery"><a href="#快速恢复-fast-recovery" class="headerlink" title="快速恢复 fast recovery"></a><u>快速恢复 fast recovery</u></h4><p>你要是超时丢的包就说明，确实很拥塞了，说明某个路由器的输入速度已经接近输出速度了，那么我就重新启动，但如果是收到3个冗余ack，就说明其实还没有那么拥塞，可能只是中间一个包发的不小心网络链路情况波动了一下，所以我们应该更快的启动才对 这是比较新的TCP版本 <strong>TCP Reno</strong>才有的，老版本是<strong>TCP Tahoe</strong>就是怎么样都是慢启动</p>
+<p>每收到一个ack cwnd就+1，要是收到3个一样的，我现在的ssthresh就等于此时cwnd&#x2F;2，就从cwnd&#x3D;ssthresh+3开始（因为你调整前收到了3个ack，你肯定要对这三个ack做一些操作），继续线性增加，你也可以理解为他从阈值开始线性增加</p>
+<p>对于一个一直在快速恢复的tcp它的吞吐量是3*windowsize&#x2F;(4*RTT)</p>
+<h1 id="Chapter4网络层-数据平面"><a href="#Chapter4网络层-数据平面" class="headerlink" title="Chapter4网络层-数据平面"></a>Chapter4网络层-数据平面</h1><p>网络层可以分成两个part <strong>数据平面</strong>和<strong>控制平面</strong></p>
+<p>首先先是数据平面的，也就是网络层中<strong>路由器</strong>的功能</p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a><u>功能</u></h2><p>表面上这一层很简单，将分组从一台发送主机移动到另一台接收主机</p>
+<p>所以他就干两件事 <strong>转发（forward）</strong>和<strong>路由选择（routing）</strong></p>
+<p>对于路由选择而言，选择路径的算法有很多，这些计算路径的算法都叫<strong>路由选择算法</strong></p>
+<p>转发是<u><strong>将分组从一个输入链路转移到合适的输出链路接口的路由器本地动作</strong></u>，时间很短（几纳秒）通常使用硬件完成</p>
+<p>路由选择是**<u>确定分组从源到目的地所采取的端到端路径的网络范围处理过程</u>**</p>
+<p>对于一个节点来讲，选哪个入口可以到目的地就是转发，路由选择是在这么多条路里选择一条路，这个路是由一堆节点构成的</p>
+<p>每个路由器都有一个重要的玩意，就是它的<strong>转发表（forwarding table）</strong>，路由器会检查到达分组的首部字段值，使用这个字段在转发表里面索引，用这个方法来转发分组。再转发表里面你可以找到分组将被转发的路由器的输出链路接口。转发是<strong>网络层数据平面</strong>的功能</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230211603027.png" alt="image-20231230211603027"></p>
+<p><del>控制平面</del></p>
+<h2 id="IP网际协议"><a href="#IP网际协议" class="headerlink" title="IP网际协议"></a><u>IP网际协议</u></h2><p>网络层分组是数据报（datagram）</p>
+<p>首先先是IPv4数据包的格式</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231230212213857.png" alt="image-20231230212213857"></p>
+<p>其中关键字段</p>
+<p><strong>版本</strong>，这4比特规定了数据包的IP协议版本。路由器查看版本能确定如何解释IP数据报的剩余部分</p>
+<p><strong>首部长度</strong>，4比特 一个这样的数据报包含一些可变数量的单项，所以你数据报的长度是会变化的，你要告诉我你有多长，确定你数据真正开始的地方</p>
+<p><strong>服务类型</strong>，8比特，用来和不同类型的数据报区分开来</p>
+<p><strong>数据报长度</strong>，是IP数据报的总长度，因为这个长度是16字节，所以你整个datagram长度最多65535字节</p>
+<p><strong>标识、标志、片偏移</strong> 这三个字段与所谓IP分片有关</p>
+<p><strong>寿命</strong>，TTL（time to live），确保你的数据报不会永远在网络中循环，每一台路由器处理的时候都会-1，为0的时候丢弃</p>
+<p><strong>协议</strong>该字段通常仅当一个IP数据报到达其最终目的地时才会有用。该字段值 指示了 IP数据报的数据部分应交给哪个特定的运输层协议。例如，值为6表明 数据部分要交给TCP,而值为17表明数据要交给UDP。</p>
+<p><strong>首部检验和</strong>，意如其名</p>
+<p><strong>源和目的IP地址</strong>，<strong>选项</strong>，<strong>数据</strong></p>
+<h3 id="IPv4数据分片"><a href="#IPv4数据分片" class="headerlink" title="IPv4数据分片"></a><u>IPv4数据分片</u></h3><p>一个链路层帧能承载的最大数据量叫做<strong>最大传送单元（Maximum Transmission Unit，MTU）</strong>，每个IP数据报都封装在链路层帧里面然后一个路由器一个路由器的传，所以说链路层协议的MTU严格地限制了IP数据报的长度</p>
+<p>为了更好地理解这一转发问题，想象你是一台互联几条链路的路由器，且每条链路运行具有不同MTU的链路层协议。假定你从某条链路收到一个IP数据报，通过检查转发表确定出链路，并且该条出链路的MTU比该IP数据报的长度要小。</p>
+<p>因为你要发出去，所以可能会想着把现在的IP数据报分片一下发，用单独的链路层帧封装这些比较小的IP数据报，这些比较小的IP数据报都叫做<strong>片（fragment）</strong></p>
+<p>片到达目的地运输层之前要重新组装起来，由于运输层肯定想着能从网络层拿到完整的，没分片的报文，那么组装的地方自然就在路由器了，但是如果在路由器组装的话，<em>路由器的性能就需要提高了</em>，<em>协议本身还要更新一些复杂的需求</em>，所以说<strong>数据报的重新组装工作会被放在端系统</strong>，而不是在路由器上</p>
+<p>那么现在到了组装环节了，首先确定这些数据报是否是一些被分片的数据报，如果是的话，他还要确认什么收到最后一片，并且怎么把他们组装到一起去</p>
+<p>所以说IPv4的IP数据报首部中有<strong>标识</strong>，<strong>标志</strong>，<strong>片偏移</strong>字段。生成一个数据报的时候，发送主机会把数据报设置的源和目的地址同时贴上标识号。</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231172922670.png" alt="image-20231231172922670"></p>
+<p>最后一个IP数据报的标识号是0，其他都是1，使用偏移字段告诉接收方，这个片应该放在初始IP数据报的哪个位置</p>
+<h2 id="IPv4编制-addressing"><a href="#IPv4编制-addressing" class="headerlink" title="IPv4编制 addressing"></a><u>IPv4编制 addressing</u></h2><p>主机与路由器连入网络的方法，通常情况，一台主机只有一条链路连接到网络，当主机的IP想发的时候，他就往这条链路上发，主机与物理链路之间的边界是<strong>接口（interface）</strong>，路由器有多个这样的接口。一个IP地址与一个接口相关联，而不是与该接口的主机或者路由器相关联</p>
+<p>每个IP地址长度为32比特，所以说一共有2^32个IP地址，他们采用<strong>点分十进制记法（dotted-decimal notation）</strong>，也就是地址中的每一个字节都是用它的十进制形式写的。 eg：193.32.216.9 二进制记法就是11000001 00100000 11011000 00001001</p>
+<p><strong>子网（subnet）</strong>：用IP的术语来说，互联这3个主机接口与1个路由器接口的网络形成一个子网（subnet） </p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231174330877.png" alt="image-20231231174330877"></p>
+<p>子网也被称为<em>IP网络</em>或直接叫做<em>网络</em></p>
+<p>下图IP编址为这个子网分配了一个地址223.1.1.0&#x2F;24，其中&#x2F;24的记法，被叫做<strong>子网掩码（network mask）</strong>，这张图一共有3个子网</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231174448643.png" alt="image-20231231174448643"></p>
+<p>怎么确定有几个子网，<u>分开主机和路由器的每个接口，产生几个隔离的网络岛，使用接口端接这些隔离的网络端点，每一个隔离的网络就是一个子网</u></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231183756074.png" alt="image-20231231183756074"></p>
+<p>高比特位就是子网的部分，低比特是主机的部分，相同子网部分的主机可以不通过路由器而相互到达（物理上）</p>
+<h3 id="无类别域间路由选择（Classless-Interdomain-Routing，CIDR）"><a href="#无类别域间路由选择（Classless-Interdomain-Routing，CIDR）" class="headerlink" title="无类别域间路由选择（Classless Interdomain Routing，CIDR）"></a><u>无类别域间路由选择（Classless Interdomain Routing，CIDR）</u></h3><p>CIDR将子网寻址的概念一般化了。使用子网寻址的时候，32比特的IP地址被分为两部分，也具有点分十进制数的形式a.b.c.d&#x2F;x，其中x指示了地址的第一部分中的比特数</p>
+<p>最高的前x比特就是IP地址的网络部分，通常被称为该地址的<strong>前缀（prefix）</strong>或者说<em>网络前缀</em></p>
+<p>有着相同前缀的一段地址的组织，<em>通常</em>被分配到一块连续的地址。当转发组织外部的一个路由器转发一个数据报的时候，路由器只需要考虑该地址的前面x个比特，这样可以减少这个路由器内部转发表的长度</p>
+<p>他这个无类别在哪呢，就是你的点分十进制是a.b.c.d&#x2F;x 这个.不是区分子网或者不是子网的标志，这样的话你可以调整x的大小去分配子网，相比使用.来调整会更灵活，使用.进行分配的叫做<strong>分类编址（classful addressing）</strong>的编制方案</p>
+<h4 id="最长前缀匹配"><a href="#最长前缀匹配" class="headerlink" title="最长前缀匹配"></a><u>最长前缀匹配</u></h4><p>这些子网都是大家协商，让后分到不同的ISP那边的，有时候一个ISP的前缀会和另一个ISP的前缀有部分相似，那么我因特网怎么发信息呢。比如说</p>
+<p>一个ISP为Fly- By-Night-I向外界告知，他来负责分配所有发送到地址的前20比特与200.23.16.0&#x2F;20相符的数据报，那么外界就不管他们具体发到哪，直接把数据报交付给ISP分配，这个ISP的行为（能力）叫做 <strong>地址聚合(address aggregation )</strong>,也称为<strong>路由聚合(route aggregation</strong> )或<strong>路由摘要 (route summarization)</strong> </p>
+<p>要是说有一个ISP也管理了一个子网，这个子网的前缀和之前那个ISP的前缀相似的很多，那么外界怎么发送数据报呢，比如说下面这个 200.23.18.0&#x2F;23</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231190423435.png" alt="image-20231231190423435"></p>
+<p>现在外界想给200.23.18.0&#x2F;23，可是前一个ISP通告了符合200.23.16.0&#x2F;20的前缀的给他管理，而另外一个ISP通告符合200.23.18.0&#x2F;23的前缀的给他管理</p>
+<p>那么外界找这个子网掩码最长的发，20&lt;23</p>
+<p>对于一个特殊IP 255.255.255.255也就是全1的ip来说，他是IP广播地址。当有一台主机发出目的地址是这个的数据报时，这个报文会交付给同一个网络中的所有主机，路由器也会选择性地向相邻的子网发送这个报文（一般不会这样做）</p>
+<h2 id="获得IP地址"><a href="#获得IP地址" class="headerlink" title="获得IP地址"></a>获得IP地址</h2><p>你可以选择和ISP联系，ISP会从自己的比较大的地址中分一个子网给你</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231191317062.png" alt="image-20231231191317062"></p>
+<p>那么ISP怎么获得自己的地址呢，就找更大的机构 因特网名字和编号分配机构（ICANN）分配，这个机构不仅仅负责分配IP地址的，他还管理DNS根服务器</p>
+<h3 id="动态主机配置协议-Dynamic-Host-Configuration-DHCP"><a href="#动态主机配置协议-Dynamic-Host-Configuration-DHCP" class="headerlink" title="动态主机配置协议 Dynamic Host Configuration DHCP"></a><u>动态主机配置协议 Dynamic Host Configuration DHCP</u></h3><p>DHCP允许主机自动获取IP地址，网络管理员可以配置DHCP使得某个特定主机每次连网的时候分配固定的IP地址，当然也可以让他分配一个<strong>临时的IP地址</strong> 使得每次连接都不同</p>
+<p>他是一个自动的协议，你每次联网他都会自动帮你跑一次，所以它又叫做<strong>即插即用协议（plug-and-play protocol）</strong> 或者说是 <strong>零配置协议（zeroconf）</strong></p>
+<p>这个协议是一个客户-服务器协议，客户是新到达的主机它要获得包括自身使用的IP地址在内的网络配置信息</p>
+<p>在最简单场合下，每个子网将具有一台DHCP服务器。如果在某子网中没有服务器，则需要一个DHCP中继代理（通 常是一台路由器），这个代理知道用于该网络的DHCP服务器的地址。图4・23显示了连接 到子网223. 1.2&#x2F;24的一台DHCP服务器，具有一台提供中继代理服务的路由器，它为连 接到子网223. 1. 1&#x2F;24和223. 1. 3&#x2F;24的到达客户提供DHCP服务。在我们下面的讨论中, 将假定DHCP服务器在该子网上是可供使用的。</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240103184329321.png" alt="image-20240103184329321"></p>
+<p>对于一个新到达的主机而言，DHCP协议是一个4步骤过程</p>
+<ul>
+<li>DHCP服务器发现。</li>
+</ul>
+<p>一个新到达的主机首要任务是发现一个要与自己交互的DHCP服务器。使用<strong>DHCP发现报文（DHCP discover message）</strong>来完成</p>
+<p>但是 这个数据报应发给谁呢？主机甚至不知道它所连接网络的IP地址，更不用说用于该 网络的DHCP服务器地址了。这时候客户会生成包含DHCP发现报文的IP数据报，使用广播的目的地址，并且源IP地址会写成0.0.0.0</p>
+<p>DHCP客户会把这个数据报传递给链路层，然后链路层将这个帧广播到所有与该子网连接的节点</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231192759959.png" alt="image-20231231192759959"></p>
+<ul>
+<li>DHCP服务器提供</li>
+</ul>
+<p>DHCP服务器收到发现报文后，用DHCP提供报文（DHCP offer message）向客户做出响应，然后目的地址会写成IP广播地址。</p>
+<p>当然一个子网中可能又不止一台DHCP服务器，每台服务器提供的报文包含有收到的 发现报文的事务ID、向客户推荐的IP地址、网络掩码以及IP地址租用期(address lease time) , 即IP地址有效的时间量。服务器租用期通常设置为几小时或几天</p>
+<ul>
+<li>DHCP请求</li>
+</ul>
+<p>这个客户会从一个或者多个服务器提供的IP选择一个，并且对于那个使用的那个服务器发送<strong>DHCP请求报文（DHCP request message）</strong>来响应</p>
+<ul>
+<li>DHCP ACK</li>
+</ul>
+<p>服务器用<strong>DHCP ACK报文（DHCP ACK message）</strong>对上面那个报文进行响应</p>
+<p>过程中双方都是以目的地址是全一的进行发送的</p>
+<h2 id="网络地址转换NAT（Network-Address-Translation）"><a href="#网络地址转换NAT（Network-Address-Translation）" class="headerlink" title="网络地址转换NAT（Network Address Translation）"></a><u>网络地址转换NAT（Network Address Translation）</u></h2><p>目前的网络端系统太多了，不可能每个你都分配一个独一无二的IP地址吧</p>
+<p>在一个<strong>专用网络（private network）</strong>或者<strong>具有专用地址的地域（realm with private address）</strong>，指的是它的地址只是对于这个网络中的设备有意义的网络</p>
+<p>路由器自己的IP地址从ISP的DHCP服务器那里获取，他自己运行一个DHCP服务器，这样这个具有专用地址的地域内部主机就可以找他获取专有网络的IP</p>
+<p>所有离开家庭路由器向更大的因特网的流量都有一个源IP地址，就是路由器的，反过来也是一样，所有进入家庭的报文都拥有一个目的IP地址</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231194336813.png" alt="image-20231231194336813"></p>
+<p>从广域网来的所有数据报都有着相同的目的IP地址，而这个路由器知道怎么把一个分组转发到一个内部主机，就是使用一张<strong>NAT转换表（NAT translation table）</strong>，表中包含了端口号和它的IP地址</p>
+<h2 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a><u>IPv6</u></h2><p>因为IPv4的32比特地址空间被用完了</p>
+<p>基于IPv4，进行改进</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240103185859916.png" alt="image-20240103185859916"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231194900259.png" alt="image-20231231194900259"></p>
+<ul>
+<li>扩大的地址容量 32比特-&gt;128比特，不止有单播（全0）和多播地址（全1），他还有<strong>任播地址（anycast address）</strong>，使得数据报可以交付给一组主机中的任意一个</li>
+<li>简化高效的40字节首部。许多IPv4字段已被舍弃或作为选项。因而所形成的40字节定长首部允许路由器更快地处理IP数据报。一种新的选项编码允许进行更灵活的选项处理</li>
+</ul>
+<p>…</p>
+<p>和IPv4相比少的几个字段</p>
+<ul>
+<li><p>分片&#x2F;重新组装。IPv6不允许在中间路由器上进行分片与重新组装。这种操作只能 在源与目的地执行。如果路由器收到的IPv6数据报因太大而不能转发到出链路上 的话，则路由器只需丢掉该数据报，并向发送方发回一个“分组太大”的ICMP 差错报文即可，加快了IP转发速度</p>
+</li>
+<li><p>首部检验和。因为因特网层中的运输层（如TCP与UDP）和数据链路层（如以太 网）协议执行了检验操作，IP设计者大概觉得在网络层中具有该项功能实属多 余，所以将其去除。再次强调的是，快速处理IP分组是关注的重点。由于IPv4首部中包含有一个TTL字段（类似于IPv6中的 跳限制字段），所以在每台路由器上都需要重新计算IPv4首部检验和。就像分片与重新组装一样，在IPv4中这也是一项耗时的操作。</p>
+</li>
+<li><p>选项。选项字段不再是标准IP首部的一部分了。但它并没有消失，而是可能出现 在IPv6首部中由“下一个首部”指出的位置上。这就是说，就像TCP或UDP协 议首部能够是IP分组中的“下一个首部” 一样，选项字段也能是“下一个首部” 。 删除选项字段使得1P首部成为定长的40字节。</p>
+</li>
+</ul>
+<h1 id="Chapter5网络层-控制平面"><a href="#Chapter5网络层-控制平面" class="headerlink" title="Chapter5网络层-控制平面"></a>Chapter5网络层-控制平面</h1><p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20231231200603118.png" alt="image-20231231200603118"></p>
+<p>有了转发表，你知道大概怎么走能到，但是结合上开销就不行了</p>
+<p>所有网络拓扑和链路开销都是已知的，怎么已知的？实践中是通过每一个节点向网络中所有其他节点广播链路状态分组来完成，其中每个链路状态分组包含它所有链接的链路标识和开销，由<strong>链路状态广播（link state broadcast）</strong>来实现</p>
+<h2 id="迪杰斯特拉算法-Dijkstra"><a href="#迪杰斯特拉算法-Dijkstra" class="headerlink" title="迪杰斯特拉算法 Dijkstra"></a><u>迪杰斯特拉算法 Dijkstra</u></h2><p>确实很重要，但是已经太熟了，就不写了</p>
+<h2 id="距离向量算法（Distance-Vector，DV）"><a href="#距离向量算法（Distance-Vector，DV）" class="headerlink" title="距离向量算法（Distance-Vector，DV）"></a><u>距离向量算法（Distance-Vector，DV）</u></h2><p>一种迭代的、异步且分布式的算法</p>
+<p>首先先是Bellman-Ford方程，设置dx(y)是从节点x到y的最低开销路径的开销</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101165408068.png" alt="image-20240101165408068"></p>
+<p>他提出了DV算法中发生的邻居到邻居通信的形式，不使用全局信息</p>
+<p>对于每个点而言，他们<u>等待</u>与他们直接相连邻居的链路开销和它从这些邻居接收到的消息，等待任何来自邻居的更新。所有节点从其邻居接收报文，<u>计算</u>其新距离向量，发生变化了自己也会<u>通知</u>别人</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101170517094.png" alt="image-20240101170517094"></p>
+<p>最左侧是初始的路由选择表，初始化后每个节点向它的两个邻居发送其距离向量</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101170650810.png" alt="image-20240101170650810"></p>
+<p>更新完，每个节点再次向邻居发送他们的更新举例向量（没变就不发了）</p>
+<h3 id="链路开销变化与故障"><a href="#链路开销变化与故障" class="headerlink" title="链路开销变化与故障"></a><u>链路开销变化与故障</u></h3><p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101171201460.png" alt="image-20240101171201460"></p>
+<p>先看a</p>
+<p>在t0时刻，y发现链路开销变化，他就会更新距离向量，并且告诉邻居，因为最低开销路径改变了</p>
+<p>t1时刻，z收到来自y的更新报文更新了他的距离，它计算出到x的最新最低开销（5-》2），然后发给邻居</p>
+<p>t2时刻，y收到了来自z的更新，然后自己更新自己的距离表。但是y的最低开销没变，他就不发了</p>
+<p>再看b</p>
+<p>在t0时刻，y检测到开销变化（4-》60）。y会重新计算自己的最低开销为</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101183952722.png" alt="image-20240101183952722"></p>
+<p>很明显这是错的，因为z是通过之前的链路情况从y经过再到的x</p>
+<p>可是现在y到x的链路已经变化了，也就是如果按这样子下去，y会选择先将数据发往通向z的链路（接口），然后z会想着将数据发往y<em>然后y再发到x去（这已经不可能了）</em>，这就像两个人一直在踢皮球一样，这叫做<strong>路由选择环路（routing loop）</strong></p>
+<p>因为y已经计算出了最低开销了，则他会在t1时刻将新的距离向量发给z</p>
+<p>t1以后，z得知从y到x的最低开销是6，那么现在z到x的最低开销是7，以此类推，这样再过43次才会逃离路由选择环路</p>
+<p><u>所以说对于链路开销增加这个坏消息来说，DV的传播速度很慢</u></p>
+<h3 id="增加毒性逆转-poisoned-reverse"><a href="#增加毒性逆转-poisoned-reverse" class="headerlink" title="增加毒性逆转 poisoned reverse"></a>增加毒性逆转 poisoned reverse</h3><p>如果z通过y路由选择到目的地x，则z会告诉y，它到x的距离是正无穷（z自己是知道自己到x的开销是x）</p>
+<p>LS和DV的区别就是，LS是要知道全局信息的，这样每次出现改变都要广播给其他节点，DV是局部扩散出去的</p>
+<h2 id="可扩展的路由的网络方法"><a href="#可扩展的路由的网络方法" class="headerlink" title="可扩展的路由的网络方法"></a><u>可扩展的路由的网络方法</u></h2><p>目前我们都是将网络看作一个互联路由器的集合，但实际上没这么简单的，路由器之间差别很多且大，整个网络也很大（<strong>规模</strong>），所以你对于每个路由器进行一个路由选择算法的消耗可想而知。并且不同的ISP，有自己的路由器网络，所以他们都希望按自己的方法运行路由器，并且对外隐藏自己的细节（<strong>管理自治</strong>）</p>
+<p>这些问题可以使用**自治系统（Autonomous System，AS)**解决，要是一整个我解决不了，我就把他分块，自己内部自己管理，但是大家之间你就要规定了，每一个AS由<u>一组通常处于相同管理控制下的路由器组成</u>，在一个ISP中的路由器以及互联网他们的链路构成一个AS，你也可以把一个ISP拆成好多个相互连接的AS</p>
+<p>在一个AS内部运行的路由选择算法叫做<strong>自治系统内部路由选择协议（intra-autonomous system routing protocol）</strong></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101190430601.png" alt="image-20240101190430601"></p>
+<h3 id="开放最短路径优先OSPF"><a href="#开放最短路径优先OSPF" class="headerlink" title="开放最短路径优先OSPF"></a><u>开放最短路径优先OSPF</u></h3><p>是Intra-AS Routing，IGP内部网关协议（interior gateway protocol）</p>
+<p>OSPF和IS-IS协议密切相关，他们都被用于因特网的AS内部路由选择</p>
+<p>开放就表示路由选择协议规范是公众可用的</p>
+<p>OSPF是一种<u>链路状态协议</u>，使用洪泛链路状态信息和dijistra最低开销路径算法</p>
+<p>使用OSPF, —台路由器构建了一幅关于整个自治系统的完整拓扑图。媒体路由器本地运行最短路径算法，确定一个以自身为根节点到所有子网的最短路径树。每条链路开销你可以自己设置</p>
+<p>OSPF在被使用的时候，路由器向自治系统内部<em>所有</em>其他路由器广播选择信息，<strong>每当一条链路状态发生变化，路由器就会广播链路状态信息</strong>，就算你没变化，你也要周期性的广播（增强鲁棒性），OSPF需要自己实现可靠报文传输、链路状态广播，因为他是和IP协议相连的</p>
+<p>OSPF协议还要检查链路正在运行，并允许OSPF路由器获得相邻路由器的网络范围链路状态的数据库。</p>
+<p>它的好处：</p>
+<ol>
+<li>安全 所有OSPF消息都经过认证(防止恶意入侵)</li>
+<li>多条相同开销路径</li>
+<li>对单播与多播路由选择的综合支持</li>
+<li>支持在单个AS中的层次结构</li>
+</ol>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101191756105.png" alt="image-20240101191756105"></p>
+<h3 id="ISP之间的路由选择：BGP"><a href="#ISP之间的路由选择：BGP" class="headerlink" title="ISP之间的路由选择：BGP"></a><u>ISP之间的路由选择：BGP</u></h3><p>在相同AS内的源和目的地之间进行分组选路时，分组遵循的路径完全由AS内部由选择协议所决定，当分组需要跨越多个AS进行路由时，就需要一个自治系统<strong>间</strong>路由选择协议，毕竟涉及了多个AS之间的协调，AS通信必须运行相同的AS间路由选择协议</p>
+<p>这种协议叫做<strong>边界网关协议（Broder Gateway Protocol，BGP）</strong></p>
+<p>每台路由器都有一个转发表，用于将到达分组转发到出路由器链路的工作，这个转发表就是由AS内部选择协议所决定的，对于在AS外部的目的地就是靠BGP了</p>
+<p>在BGP中你的分组不是到达一个特定目的地地址，而是到CIDR前缀。对于BGP目的地是按138.16.68&#x2F;22的形式。转发表将具有（x，l）的表项，前面表示你BGP的目的地，表示接口，它是其中一个接口号</p>
+<p>BGP提供</p>
+<ul>
+<li>从邻居AS获得前缀的可达性信息</li>
+<li>确定到该前缀的“最好的”路由（到这里最好怎么走）</li>
+</ul>
+<p>对于每个AS来讲，内部的路由器有两种，<strong>内部路由器（internal router）</strong>，还有<strong>网关路由器（gateway router）</strong>，前者表示位于AS边缘的路由器，它直接连着其他AS中的一台或多台路由器。内部就是只和AS中的主机和路由器连接的，在AS1中路由器1c是网关路由器；路由器1a 、1b和1d是内部路由器</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101193627986.png" alt="image-20240101193627986"></p>
+<p>每条直接连接以及所有通过该连接发送的BGP报文，都被叫做<strong>BGP连接（BGP connection）</strong>，跨越两个AS的BGP连接叫做<strong>外部BGP（eBGP)<strong>，相同AS中的叫做</strong>内部BGP（iBGP）</strong></p>
+<p>首先，AS3向AS2发送一个BGP报文，告知x存在 并且位于AS3中；我们将该报文表示为“AS3 x” 。然后AS2向AS1发送一个BGP报文, 告知x存在并且能够先通过AS2然后进入AS3进而到达x我们将该报文表示为“AS2 AS3x” 。以这种方式，每个自治系统不仅知道x的存在，且知道通向x的自治系统的路径</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101194132187.png" alt="image-20240101194132187"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240101194323975.png" alt="image-20240101194323975"></p>
+<p>在这个过程中，为了传播可达性信息，使用了iBGP和eBGP会话，在传达x可达性的过程中，网关路由器3a会先向网关路由器2c发送一个eBGP报文“AS3 x”，然后2c向AS2中所有的其他路由器发送iBGP报文。网关路由器2a向1c发送一个eBGP报文“AS2 AS3”，以此类推</p>
+<p>在真实情况下，可能不止一条能保证x的可达性，某个给定路由器到某个给定目的地可能有多条路径，内部都是不同的AS序列，从1d到3d附加了一条，那么就有两条到x的路了”AS2 AS3 x” “AS3 x”</p>
+<p>用BGP术语来说，前缀及其属性称为路由(route)。两个较为重要的属性是AS-PATH和NEXT HOP。AS-PATH属性包含了通告已经通过的AS的列表，如我们在前面的例子中所见。为了生成AS-PATH的值，当一个前缀通过某AS时，该AS将其ASN加入AS-PATH中的现有列表。例如，在图5-10中，从AS1到子网x有两条路：其中一条使用AS-PATH “AS2AS3” ；而另一条使用 AS-PATH “AS3” 。<u>BGP路由器还使用AS-PATH属性来检测和防止通告环路</u>；特别是，如果一台路由器在路径列表中看到包含了它自己的AS,它将拒绝该通过</p>
+<p>NEXT PATH属性具有敏感而重要的作用。NEXT HOP是AS PATH起始的路由器接口的IP地址。为了深入理解该属 性，我们再次参考图5・10。如图5・10中所指示的那样，对于从AS1通过AS2到x的路由 “AS2 AS3 x” ，其属性NEXT-HOP是路由器2a左边接口的IP地址。对于从AS1绕过AS2 到％的路由“AS3T,其NEXT-HOP属性是路由器3d最左边接口的IP地址</p>
+<p>总的说来, 在这个假想的例子中，AS1中的每台路由器都知道了到前缀兀的两台BGP路由： </p>
+<p>路由器2a的最左侧接口的IP地址：AS2 AS3；x</p>
+<p>路由器3d的最左侧接口的IP地址：AS3；x </p>
+<p>这里，每条BGP路由包含3个组件：NEXT- HOP；ASPATH；目的前缀</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102190056825.png" alt="image-20240102190056825"></p>
+<h3 id="BGP路由选择"><a href="#BGP路由选择" class="headerlink" title="BGP路由选择"></a><u>BGP路由选择</u></h3><p>面对多个路径，怎么选</p>
+<h4 id="热土豆路由选择-hot-potato-routing"><a href="#热土豆路由选择-hot-potato-routing" class="headerlink" title="热土豆路由选择 hot potato routing"></a><u>热土豆路由选择 hot potato routing</u></h4><p>要是1b想要到达x，他会先看自己的AS内部路由选择信息，找到通往2a的最低开销AS内部路径，设开销为穿越的链路数，所以从1b到2a为2，然后路由器1b会查看自己的转发表，并且找到通往路由器2a的位于最低开销路径上的接口I，1b把（x，l）加到自己的转发表里面</p>
+<p>热土豆路由会想着尽可能快地把分组送出自己的AS，他不会考虑AS外部到目的地的余下部分开销</p>
+<h4 id="路由器选择算法"><a href="#路由器选择算法" class="headerlink" title="路由器选择算法"></a>路由器选择算法</h4><p>对于任何给定目的地前缀，进入BGP路由选择算法的输入是某前缀的所有路由集合，这个前缀是已经被路由器学习且接受的，这有一条的话就直接用了，多条就会按顺序地调用下列消除规则直至剩下一条</p>
+<p>首先路由会被指派一个<strong>本地偏好（local preference）</strong>值作为自己的属性之一，这个完全取决于这个AS的网络管理员，能由该路由器设置或可能由在相同AS中的另一台路由器学习到，偏好值最高的就会被选择</p>
+<p>其次选择有最短AS-PATH的路由（AS2 AS3&gt; AS2），也可以使用距离向量算法决定，距离测度是AS跳的跳数</p>
+<p>余下路由中使用热土豆路由选择，也就是选择具有最靠近NEXT-HOP路由器的路由</p>
+<p>还有很多的话，用BGP标识选择路由</p>
+<p>举一个例子，我们再次考虑路由器1b。前面讲过到前缀x确切地有两条BGP路由，一条通过AS2而另一条绕过AS2。前面也讲过如果它使用自己的热土豆路由选择，则BGP将通过AS2向前缀x路由分组。但在上面的路由选择算法中，在规则3之前应用了规则2,导致BGP选择绕过AS2的那条路由，因为该路由具有更短的AS-PATH。因此 我们看到使用上述路由选择算法，BGP不再是一种自私的算法，即它先查找具有短AS路径的路由（因而很可能减小端到端时延）。</p>
+<h4 id="路由选择策略"><a href="#路由选择策略" class="headerlink" title="路由选择策略"></a><u>路由选择策略</u></h4><p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102193335100.png" alt="image-20240102193335100"></p>
+<h2 id="ICMP因特网控制报文协议"><a href="#ICMP因特网控制报文协议" class="headerlink" title="ICMP因特网控制报文协议"></a><u>ICMP因特网控制报文协议</u></h2><p>P290</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102193715056.png" alt="image-20240102193715056"></p>
+<p>0 0是对ping的回答</p>
+<p>3 3是目的端口不可达</p>
+<p>8 0是对请求的回显</p>
+<p>11 0是TTL过期</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102194119465.png" alt="image-20240102194119465"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102194130801.png" alt="image-20240102194130801"></p>
+<h1 id="Chapter6"><a href="#Chapter6" class="headerlink" title="Chapter6"></a>Chapter6</h1><p><strong>data-link layer</strong> has responsibility of </p>
+<p>transferring datagram from one node </p>
+<p>to <strong>physically adjacent</strong> node over a link</p>
+<p><strong>数据链路层</strong>负责从一个节点传输数据报链路上<strong>物理上相邻</strong>的节点</p>
+<p>网络接口卡（NIC）也叫网络适配器，实现了许多链路层服务的专用芯片</p>
+<p>许多功能使用硬件实现的</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102195026789.png" alt="image-20240102195026789"></p>
+<p>CSMA 持续监听有人用就先不用，等待检测到一段时间没有用了，再用，<strong>载波侦听（carrier sensing）</strong></p>
+<p>要是和别人同时开始用，就暂停使用，这叫<strong>碰撞检测（collision detection）</strong>，就是一个传输节点在传输的时候一直在侦听这个信道，要是有一个节点正在传输干扰帧，他就停下，重复“侦听-当空闲时传输”循环之前等待一段时间</p>
+<p>这两个规则包含在<strong>载波侦听多路访问（carrier sense multiple access，CAMA），</strong>和<strong>具有碰撞检测的CSMA（CSMA with Collision Detection，CSMA&#x2F;CD）</strong></p>
+<p>用时空图来展示</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102202657498.png" alt="image-20240102202657498"></p>
+<p>CSMA&#x2F;CD会在一检测到碰撞就停下，因为碰撞了你的帧就损坏了，所以再传也没用了，但是前者的话即使可以发现碰撞他也继续传，你传浪费你的资源和信道的资源</p>
+<p>中间那个检测到其他节点发送的时延叫做传播时延，要是这玩意为0那他的效率就是基本上是1了，就是只要你发了，我立刻就知道的意思</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102203552194.png" alt="image-20240102203552194"></p>
+<p>MAC地址，每个网络适配器有一个链路层地址，一个网卡对应一个全世界独一无二的，一个mac可以有多个IP地址，这玩意你能叫LAN地址、物理地址或者mac地址</p>
+<p>主机将帧给交换机，交换机转交给路由器，反过来也一样</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102203922509.png" alt="image-20240102203922509"></p>
+<p>有点类似于IP，有时候你的NIC会像要局域网上所有其他适配器来接受并处理它发的帧，发送适配器在这个帧的目的地址字段中插入一个特殊的<strong>MAC广播地址（broadcast address）</strong>FF-FF-FF-FF-FF-FF，48个连续的1</p>
+<p>你的链路层mac地址和你的IP地址是不一样的，所以你要发的时候肯定要有一个映射关系，才能做到从发送的角度而言，网络层和链路层的联系</p>
+<p>这个由<strong>地址解析协议（address resolution protocol）</strong>完成，类似于NAT</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102204549735.png" alt="image-20240102204549735"></p>
+<p>现在假设1P地址为222. 222. 222. 220的主机要向主机222. 222. 222. 222发送IP数据</p>
+<p>他们都在一个子网里面，所以说发送源要给它的适配器提供IP数据报和目的主机的MAC地址，然后发送适配器将构造一个包含目的地的MAC地址的链路层帧，并把该帧发送进局域网。</p>
+<p>问题是我只知道它的IP地址，我不知道它的MAC地址。这就靠ARP了，发送主机里面的ARP模块将取在相同局域网上的任何IP地址作为输入，然后返回相应的MAC地址</p>
+<p>所以说ARP是负责将一个IP地址解析为一个MAC地址，也有点类似DNS，但是ARP<u>只为在同一份子网上的主机和路由器接口解析IP地址</u>，相互之间的映射关系会存在<strong>ARP表</strong>中，说白了就是一个哈希表</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102205130486.png" alt="image-20240102205130486"></p>
+<p>现在假设主机222. 222. 222. 220要发送一个数据报，该数据报要IP寻址到本子网上另 一台主机或路由器。发送主机需要获得给定IP地址的目的主机的MAC地址。如果发送方 的ARP表具有该目的节点的表项，这个任务是很容易完成的。但如果ARP表中当前没有该目的主机的表项的话？</p>
+<p>ARP协议会被使用来解析这个地址，发送方会构造一个称为<strong>ARP分组</strong>的特殊分组。</p>
+<p>一个ARP分组有几个字段，包括发送和接收IP地址及MAC地址。ARP查询分组和响应分组都具有相同的格式。ARP查询分组的目的是询问子网上所有其他主机和路由器，以确定对应于要解析的IP地址的那个MAC地址</p>
+<p>…220向它的适配器传递一个ARP查询分组，并且指示适配器应该用MAC广播地址（即FF-FF-FF-FF-FF-FF）来发送这个分组</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102205556152.png" alt="image-20240102205556152"></p>
+<p>然后被广播到的适配器会把这个ARP分组往上传递给ARP模块，他们都会检查自己的IP地址是不是这个，匹配上的就给查询主机返回一个带有所希望映射的响应ARP分组，然后220那边会更新自己的ARP表，然后它再发送想发的IP数据报</p>
+<p>ARP是即插即用的，ARP表是自动生成的并且如果某主机与子网断开连接，它的表项最终会从留在子网中的节点的 表中删除掉</p>
+<p>对于外网的ARP协议那也一样，路由器是一个三层的设备，他也是有自己的mac和IP的所以他有NIC，所以它也可以使用ARP</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102210503294.png" alt="image-20240102210503294"></p>
+<p>数据必须发给路由器先，所以你的数据包要发往路由器的IP地址，怎么得到路由器的mac呢，你用一次ARP就行了</p>
+<p>以太网帧</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240102211112157.png" alt="image-20240102211112157"></p>
+<p>这些地址都是MAC地址，因为它是用交换机的</p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240103203301092.png" alt="image-20240103203301092"></p>
+<p><img src="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/image-20240103203313933.png" alt="image-20240103203313933"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Weeb-killer.github.io">Weeb-killer</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://weeb-killer.github.io/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/">https://weeb-killer.github.io/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://Weeb-killer.github.io" target="_blank">Weeb-killer的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/12/13/django/" title="django"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">django</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Weeb-killer</div><div class="author-info__description">眼光不错我的朋友</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Weeb-killer/Weeb-killer.github.io"><i class="fab fa-github"></i><span>Hello</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Weeb-killer/Weeb-killer.github.io" target="_blank" title=""><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">下一篇马上到来!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Chapter1"><span class="toc-number">1.</span> <span class="toc-text">Chapter1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E4%BA%A4%E6%8D%A2-Packet-switching"><span class="toc-number">1.1.</span> <span class="toc-text">分组交换 Packet-switching</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%BD%AC%E5%8F%91%E4%BC%A0%E8%BE%93-store-and-forward-transmission"><span class="toc-number">1.1.1.</span> <span class="toc-text">存储转发传输 store-and-forward transmission</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%87%E9%80%89%E6%A0%B8%E5%BF%83%EF%BC%9A%E7%94%B5%E8%B7%AF%E4%BA%A4%E6%8D%A2"><span class="toc-number">1.2.</span> <span class="toc-text">备选核心：电路交换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%84%E7%A7%8D%E6%97%B6%E5%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">各种时延</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%A4%84%E7%90%86%E6%97%B6%E5%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">节点处理时延</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E9%98%9F%E6%97%B6%E5%BB%B6"><span class="toc-number">1.3.2.</span> <span class="toc-text">排队时延</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E6%97%B6%E5%BB%B6"><span class="toc-number">1.3.3.</span> <span class="toc-text">传输时延</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E6%92%AD%E6%97%B6%E5%BB%B6"><span class="toc-number">1.3.4.</span> <span class="toc-text">传播时延</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94%E4%BC%A0%E8%BE%93%E4%B8%8E%E4%BC%A0%E6%92%AD"><span class="toc-number">1.3.5.</span> <span class="toc-text">对比传输与传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E9%87%8F%E5%BC%BA%E5%BA%A6"><span class="toc-number">1.3.6.</span> <span class="toc-text">流量强度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E5%8D%8F%E8%AE%AE%E6%A0%88%EF%BC%88%E7%9C%8B%E6%AF%8F%E4%B8%80%E5%B1%82%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">因特网协议栈（看每一层的功能）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-number">1.4.1.</span> <span class="toc-text">应用层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%BE%93%E5%B1%82"><span class="toc-number">1.4.2.</span> <span class="toc-text">运输层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-number">1.4.3.</span> <span class="toc-text">网络层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="toc-number">1.4.4.</span> <span class="toc-text">链路层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%B1%82"><span class="toc-number">1.4.5.</span> <span class="toc-text">物理层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OSI%E7%9A%847%E5%B1%82%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.6.</span> <span class="toc-text">OSI的7层结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%81%E8%A3%85"><span class="toc-number">1.4.7.</span> <span class="toc-text">封装</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Chapter2"><span class="toc-number">2.</span> <span class="toc-text">Chapter2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">网络应用程序体系结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7-%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%EF%BC%88client-server-architecture%EF%BC%89"><span class="toc-number">2.1.1.</span> <span class="toc-text">客户-服务器体系结构（client-server architecture）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#P2P"><span class="toc-number">2.1.2.</span> <span class="toc-text">P2P</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1"><span class="toc-number">2.1.3.</span> <span class="toc-text">进程通信</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%AF%BB%E5%9D%80"><span class="toc-number">2.2.</span> <span class="toc-text">进程寻址</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AE%E9%9C%80%E8%A6%81%E5%8C%85%E6%8B%AC%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-number">2.2.1.</span> <span class="toc-text">运输层协议需要包括的内容</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%A0%E7%89%B9%E7%BD%91%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.3.</span> <span class="toc-text">因特网传输协议服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP"><span class="toc-number">2.3.1.</span> <span class="toc-text">TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1-connection-oriented"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">面向连接服务 connection-oriented</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E6%9C%8D%E5%8A%A1-reliable-transport"><span class="toc-number">2.3.1.2.</span> <span class="toc-text">可靠的数据传输服务 reliable transport</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6-congestion-control"><span class="toc-number">2.3.1.3.</span> <span class="toc-text">拥塞控制 congestion control</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E6%8E%A7%E5%88%B6-flow-control"><span class="toc-number">2.3.1.4.</span> <span class="toc-text">流控制 flow control</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8D%E6%8F%90%E4%BE%9B"><span class="toc-number">2.3.1.5.</span> <span class="toc-text">不提供</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP"><span class="toc-number">2.3.2.</span> <span class="toc-text">UDP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web%E5%92%8CHTTP"><span class="toc-number">2.4.</span> <span class="toc-text">Web和HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP"><span class="toc-number">2.4.1.</span> <span class="toc-text">HTTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E8%BF%9E%E6%8E%A5"><span class="toc-number">2.4.2.</span> <span class="toc-text">HTTP连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%9E%E6%8C%81%E7%BB%AD%E8%BF%9E%E6%8E%A5%EF%BC%88non-persistent-connection%EF%BC%89"><span class="toc-number">2.4.2.1.</span> <span class="toc-text">非持续连接（non-persistent connection）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E7%BB%AD%E8%BF%9E%E6%8E%A5%EF%BC%88persistent-HTTP%EF%BC%89"><span class="toc-number">2.4.2.2.</span> <span class="toc-text">持续连接（persistent HTTP）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.5.</span> <span class="toc-text">HTTP请求报文格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E8%A1%8C%EF%BC%88request-line%EF%BC%89"><span class="toc-number">2.5.1.</span> <span class="toc-text">请求行（request line）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E9%83%A8%E8%A1%8C%EF%BC%88header%EF%BC%89"><span class="toc-number">2.5.2.</span> <span class="toc-text">首部行（header）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87%EF%BC%88response-message%EF%BC%89"><span class="toc-number">2.6.</span> <span class="toc-text">HTTP响应报文（response message）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E7%8A%B6%E6%80%81%E8%A1%8C"><span class="toc-number">2.6.1.</span> <span class="toc-text">初始状态行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E4%BA%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E4%BA%A4%E4%BA%92%EF%BC%9Acookie"><span class="toc-number">2.6.2.</span> <span class="toc-text">用户于服务器的交互：cookie</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web%E7%BC%93%E5%AD%98%EF%BC%88Web-cache%EF%BC%89"><span class="toc-number">2.7.</span> <span class="toc-text">Web缓存（Web cache）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6GET"><span class="toc-number">2.7.1.</span> <span class="toc-text">条件GET</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6"><span class="toc-number">2.8.</span> <span class="toc-text">电子邮件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMTP"><span class="toc-number">2.8.1.</span> <span class="toc-text">SMTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94HTTP"><span class="toc-number">2.8.2.</span> <span class="toc-text">对比HTTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.8.3.</span> <span class="toc-text">邮件报文格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%AE%E4%BB%B6%E8%AE%BF%E9%97%AE%E5%8D%8F%E8%AE%AE%EF%BC%88mail-access-protocol%EF%BC%89"><span class="toc-number">2.9.</span> <span class="toc-text">邮件访问协议（mail access protocol）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#POP3"><span class="toc-number">2.9.1.</span> <span class="toc-text">POP3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IMAP"><span class="toc-number">2.9.2.</span> <span class="toc-text">IMAP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-Domain-name-system%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.10.</span> <span class="toc-text">DNS Domain name system域名解析系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS%E7%BC%93%E5%AD%98"><span class="toc-number">2.10.1.</span> <span class="toc-text">DNS缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#A"><span class="toc-number">2.10.1.1.</span> <span class="toc-text">A</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NS"><span class="toc-number">2.10.1.2.</span> <span class="toc-text">NS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CNAME"><span class="toc-number">2.10.1.3.</span> <span class="toc-text">CNAME</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MX"><span class="toc-number">2.10.1.4.</span> <span class="toc-text">MX</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.10.2.</span> <span class="toc-text">DNS报文格式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Chapter3%E8%BF%90%E8%BE%93%E5%B1%82"><span class="toc-number">3.</span> <span class="toc-text">Chapter3运输层</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E6%9C%8D%E5%8A%A1%E5%92%8C%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.1.</span> <span class="toc-text">传输服务和协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%BE%93%E5%B1%82VS%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="toc-number">3.1.1.</span> <span class="toc-text">运输层VS网络层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82%E6%A6%82%E8%BF%B0"><span class="toc-number">3.1.2.</span> <span class="toc-text">传输层概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E5%92%8C%E5%A4%9A%E8%B7%AF%E5%88%86%E8%A7%A3%EF%BC%88multiplexing%E5%92%8Cde-%EF%BC%89"><span class="toc-number">3.1.3.</span> <span class="toc-text">多路复用和多路分解（multiplexing和de-）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E8%BF%9E%E6%8E%A5%E5%A4%8D%E7%94%A8"><span class="toc-number">3.1.4.</span> <span class="toc-text">面向连接复用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP-User-Datagram-Protocol-%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E6%8A%A5%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.2.</span> <span class="toc-text">UDP User Datagram Protocol 用户数据报协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP%E6%A0%A1%E9%AA%8C%E5%92%8C-checksum"><span class="toc-number">3.2.1.</span> <span class="toc-text">UDP校验和 checksum</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%8F%AF%E9%9D%A0%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE"><span class="toc-number">3.3.</span> <span class="toc-text">构造可靠数据传输协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rdt1-0"><span class="toc-number">3.3.1.</span> <span class="toc-text">rdt1.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rdt2-0"><span class="toc-number">3.3.2.</span> <span class="toc-text">rdt2.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rdt2-1"><span class="toc-number">3.3.3.</span> <span class="toc-text">rdt2.1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rdt2-2"><span class="toc-number">3.3.4.</span> <span class="toc-text">rdt2.2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rdt3-0"><span class="toc-number">3.3.5.</span> <span class="toc-text">rdt3.0</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%EF%BC%88pipeline%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">流水线（pipeline）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go-Back-N"><span class="toc-number">3.4.1.</span> <span class="toc-text">Go-Back-N</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E9%87%8D%E4%BC%A0-Selective-Repeat"><span class="toc-number">3.4.2.</span> <span class="toc-text">选择重传 Selective Repeat</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-1"><span class="toc-number">3.5.</span> <span class="toc-text">TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E6%8A%A5%E6%96%87%E7%AB%AF%E7%BB%93%E6%9E%84"><span class="toc-number">3.5.1.</span> <span class="toc-text">TCP报文端结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%8F%E5%8F%B7%E5%92%8C%E7%A1%AE%E8%AE%A4%E5%8F%B7"><span class="toc-number">3.5.1.1.</span> <span class="toc-text">序号和确认号</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%8E%E5%B8%A6%EF%BC%88piggybacked%EF%BC%89"><span class="toc-number">3.5.2.</span> <span class="toc-text">捎带（piggybacked）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%80%E8%BF%94%E6%97%B6%E9%97%B4%E7%9A%84%E4%BC%B0%E8%AE%A1%E4%BB%A5%E5%8F%8A%E8%B6%85%E6%97%B6"><span class="toc-number">3.5.3.</span> <span class="toc-text">往返时间的估计以及超时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%9D%A0%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93"><span class="toc-number">3.5.4.</span> <span class="toc-text">可靠数据传输</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E6%B5%81%E6%8E%A7%E5%88%B6%EF%BC%88flow-control%EF%BC%89"><span class="toc-number">3.5.5.</span> <span class="toc-text">TCP流控制（flow control）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86"><span class="toc-number">3.5.6.</span> <span class="toc-text">TCP连接管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">3.5.7.</span> <span class="toc-text">TCP拥塞控制的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%85%A2%E5%90%AF%E5%8A%A8-slow-start"><span class="toc-number">3.5.7.1.</span> <span class="toc-text">慢启动 slow-start</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8B%A5%E5%A1%9E%E9%81%BF%E5%85%8D-congestion-avoidance"><span class="toc-number">3.5.7.2.</span> <span class="toc-text">拥塞避免 congestion avoidance</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E6%81%A2%E5%A4%8D-fast-recovery"><span class="toc-number">3.5.7.3.</span> <span class="toc-text">快速恢复 fast recovery</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Chapter4%E7%BD%91%E7%BB%9C%E5%B1%82-%E6%95%B0%E6%8D%AE%E5%B9%B3%E9%9D%A2"><span class="toc-number">4.</span> <span class="toc-text">Chapter4网络层-数据平面</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD"><span class="toc-number">4.1.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IP%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.2.</span> <span class="toc-text">IP网际协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IPv4%E6%95%B0%E6%8D%AE%E5%88%86%E7%89%87"><span class="toc-number">4.2.1.</span> <span class="toc-text">IPv4数据分片</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPv4%E7%BC%96%E5%88%B6-addressing"><span class="toc-number">4.3.</span> <span class="toc-text">IPv4编制 addressing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E7%B1%BB%E5%88%AB%E5%9F%9F%E9%97%B4%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%EF%BC%88Classless-Interdomain-Routing%EF%BC%8CCIDR%EF%BC%89"><span class="toc-number">4.3.1.</span> <span class="toc-text">无类别域间路由选择（Classless Interdomain Routing，CIDR）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%80%E9%95%BF%E5%89%8D%E7%BC%80%E5%8C%B9%E9%85%8D"><span class="toc-number">4.3.1.1.</span> <span class="toc-text">最长前缀匹配</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%BE%97IP%E5%9C%B0%E5%9D%80"><span class="toc-number">4.4.</span> <span class="toc-text">获得IP地址</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AE-Dynamic-Host-Configuration-DHCP"><span class="toc-number">4.4.1.</span> <span class="toc-text">动态主机配置协议 Dynamic Host Configuration DHCP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2NAT%EF%BC%88Network-Address-Translation%EF%BC%89"><span class="toc-number">4.5.</span> <span class="toc-text">网络地址转换NAT（Network Address Translation）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPv6"><span class="toc-number">4.6.</span> <span class="toc-text">IPv6</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Chapter5%E7%BD%91%E7%BB%9C%E5%B1%82-%E6%8E%A7%E5%88%B6%E5%B9%B3%E9%9D%A2"><span class="toc-number">5.</span> <span class="toc-text">Chapter5网络层-控制平面</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%AA%E6%9D%B0%E6%96%AF%E7%89%B9%E6%8B%89%E7%AE%97%E6%B3%95-Dijkstra"><span class="toc-number">5.1.</span> <span class="toc-text">迪杰斯特拉算法 Dijkstra</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%9D%E7%A6%BB%E5%90%91%E9%87%8F%E7%AE%97%E6%B3%95%EF%BC%88Distance-Vector%EF%BC%8CDV%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">距离向量算法（Distance-Vector，DV）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%B7%AF%E5%BC%80%E9%94%80%E5%8F%98%E5%8C%96%E4%B8%8E%E6%95%85%E9%9A%9C"><span class="toc-number">5.2.1.</span> <span class="toc-text">链路开销变化与故障</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E6%AF%92%E6%80%A7%E9%80%86%E8%BD%AC-poisoned-reverse"><span class="toc-number">5.2.2.</span> <span class="toc-text">增加毒性逆转 poisoned reverse</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E7%9A%84%E8%B7%AF%E7%94%B1%E7%9A%84%E7%BD%91%E7%BB%9C%E6%96%B9%E6%B3%95"><span class="toc-number">5.3.</span> <span class="toc-text">可扩展的路由的网络方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E6%94%BE%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E4%BC%98%E5%85%88OSPF"><span class="toc-number">5.3.1.</span> <span class="toc-text">开放最短路径优先OSPF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ISP%E4%B9%8B%E9%97%B4%E7%9A%84%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%EF%BC%9ABGP"><span class="toc-number">5.3.2.</span> <span class="toc-text">ISP之间的路由选择：BGP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BGP%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">5.3.3.</span> <span class="toc-text">BGP路由选择</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%83%AD%E5%9C%9F%E8%B1%86%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9-hot-potato-routing"><span class="toc-number">5.3.3.1.</span> <span class="toc-text">热土豆路由选择 hot potato routing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95"><span class="toc-number">5.3.3.2.</span> <span class="toc-text">路由器选择算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5"><span class="toc-number">5.3.3.3.</span> <span class="toc-text">路由选择策略</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ICMP%E5%9B%A0%E7%89%B9%E7%BD%91%E6%8E%A7%E5%88%B6%E6%8A%A5%E6%96%87%E5%8D%8F%E8%AE%AE"><span class="toc-number">5.4.</span> <span class="toc-text">ICMP因特网控制报文协议</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Chapter6"><span class="toc-number">6.</span> <span class="toc-text">Chapter6</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/" title="计算机网络-自顶向下">计算机网络-自顶向下</a><time datetime="2024-01-03T09:07:48.000Z" title="发表于 2024-01-03 17:07:48">2024-01-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/13/django/" title="django">django</a><time datetime="2023-12-13T10:45:28.000Z" title="发表于 2023-12-13 18:45:28">2023-12-13</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Weeb-killer</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
